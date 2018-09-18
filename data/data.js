@@ -1,21 +1,4 @@
-module.exports = {
-  mtData: mtData,
-  searchmtdata: searchmtdata
-}
 
-var mt_data = mtData()
-function searchmtdata(id) {
-  var result
-  for (let i = 0; i < mt_data.list.length; i++) {
-    var mt = mt_data.list[i]
-    if (mt.id == id) {
-      result = mt
-    }
-  }
-  return result || {}
-}
-
-function mtData() {
   var arr = {
     list: [
       {
@@ -69,7 +52,5 @@ function mtData() {
       }
     ]
   }
-  return arr
-}
 
 
