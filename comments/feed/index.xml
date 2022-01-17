@@ -8,8 +8,8 @@
 <channel>
 	<title>
 	Comments for wordpress	</title>
-	<atom:link href="/static/comments/feed" rel="self" type="application/rss+xml" />
-	<link>/static/</link>
+	<atom:link href="/comments/feed" rel="self" type="application/rss+xml" />
+	<link>/</link>
 	<description>Just another WordPress site</description>
 	<lastBuildDate>Fri, 14 Jan 2022 12:06:08 +0000</lastBuildDate>
 	<sy:updatePeriod>
