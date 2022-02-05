@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=0">
+    <title>☀Find your words to live by</title>
+    <meta name="keywords" content="人生箴言，名人名言，经典语录，励志格言，智慧格言，佛陀教言" />
+    <meta name="description" content="专注于分享古今中外的人生箴言、名人名言、经典语录等名言佳句。不求大而全，但求句句经典。人生苦短，多读经典。" />
+    <link rel="stylesheet" href="/css/simple-grid.css?v=0.1">
+    <link rel="stylesheet" href="/css/motto.css?v=1.11">
+    <link rel="shortcut icon" href="/icon/favicon.ico" type="image/x-icon" />
+    <style type="text/css">
+        .pcenter {
+            text-align: center;
+        }
+    </style>
+
+    <!-- 引入组件库 -->
+    <!-- import Vue before Element -->
+    <script src="/js/vue.js"></script>
+    
+    <script src="/js/axios.min.js"></script>
+    <script src="/js/config.js"></script>
+
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script type="text/javascript">
+
+        //检查是否登录过，如未则自动登录
+        axios.get("/wx/checkLogin").then(function (res) {
+            if (res.data == 0){
+                window.location.href = "/wx/login?fr="+encodeURI(window.location.href);
+            }else{
+                console.log("has loginned");
+            }
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        /*
+        var url = (window.location.href).split('#')[0];
+        axios.get(apiHost+"/wx/getWxConfig", {
+            params:{
+                fr:url
+            }
+        }).then(function (res) {
+            console.log(res);
+            if (res.status == 200){
+                alert(res.data.appId);
+                wx.config({
+                    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId: res.data.appId, // 必填，公众号的唯一标识
+                    timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
+                    signature: res.data.signature,// 必填，签名
+                    jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData'] // 必填，需要使用的JS接口列表
+                });
+            }
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+*/
+
+    </script>
+
+</head>
+<body>
+    <header>
+        <a href="./index.html"><img src="/icon/motto-logo.png" style="height: 3rem;" /></a>
+    </header>
+
+    <div id="app">
+           
+            <div class="container" style="overflow:auto;margin-top:5rem;">
+                <div class="row" style="margin-top: 1rem; border-bottom:thin dashed #ccc;" v-for="item in data">
+                    <div class="col-12">
+                        <div class="titleleft">
+                            <span class="topic" style="margin-right:1rem;color:gray;" @touchstart.prevent="goTouchstart(item.id)" @touchend.prevent="goTouchend(item.id)" >{{item.updateTm}}</span>
+                            <div style="display: inline;" v-if="item.topics!=''" v-for="(topic,index) in item.topics" :key="index">
+                                <span class="topic" :style="{'background-color':bgColors[index % bgColors.length]}">{{topic}}</span>&nbsp;
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12" style="text-indent: 0em;" v-if="item.imgUrl!=''">
+                        <!-- <img v-bind:src="item.imgUrl" /> -->
+                        <img :src="imgUrl+item.imgUrl" class="motto_pic" :onerror="defaultImg" @dblclick="refreshImg" />
+                    </div>
+                    <div class="col-12">{{ item.content }}</div>
+                    <div class="col-12" style="text-align:left;" v-if="item.author!=''"><p>——{{item.author}}</p></div>
+                    <div class="col-6"></div>
+                    <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem" src="/icon/copy.png"></div>
+                    <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-black.png"></div>
+                    <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-red.png"></div>
+                    <div class="col-2" @click="gotoEditor(item.id)"><img style="width:2.5rem;height:2.5rem" src="/icon/edit2.png"></div>
+                    <!--<div class="col-1" @click="share(item);"><img style="width:2.5rem;height:2.5rem" src="/icon/share.png"></div>-->
+
+
+                </div>
+
+                <!-- <p v-if="loading">加载中...</p> -->
+                <p class="pcenter" v-if="noMore">—— 没有更多了 ——</p>
+                <p class="pcenter" v-if="!noMore" @click="loadMore();">点击浏览更多☟</p>
+                <p class="pcenter" style="line-height: 5rem;">&nbsp;</p>
+            </div>
+
+      </div>
+      <input id="copy_content" type="text" value=""  style="position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;"/>
+  <script>
+    //
+    var key;
+    var href = window.location.href;
+
+    if (-1 != href.indexOf("=")){
+        var para = href.split("="); //截取 url中的“=”,获得“=”后面的参数
+        key = decodeURI(para[1]);
+    }
+    if (typeof(key) == undefined){
+        key = '';
+    }
+    //
+    var favIdStr = localStorage.getItem("favids");
+    if (favIdStr == null) favIdStr="";
+
+    var timeOutEvent = 0; //记录触摸时长 
+
+    new Vue({
+      el: '#app',
+      data: function() {
+        return {
+                count: 1,
+                loading: false,
+                page: 1,
+                data: [],
+                imgUrl: imgUrlBase,
+                defaultImg: 'this.src=imgUrlBase+"null.jpg"',
+                favIds: favIdStr,//收藏
+                bgColors: ["#5eb95e","#3bb4f2","#0e90d2","#F37B1D","#dd514c"]
+                // total: 1
+            }
+        },
+        created(){console.log('实例已经创建完成');this.loadMore();},
+        computed: {
+            noMore () {
+                //当获取数据0条时
+                return this.count < 9;
+            },
+            busy () {
+                return this.loading;
+            },
+
+        },
+        methods: {
+            refreshImg: function(e){
+                e.target.src = ((e.target.src).split("?"))[0]+"?"+Math.ceil(Math.random()*100);
+            },
+            gotoEditor: function(id){
+                window.location.href="./editor.html?motto-id="+id;
+            },
+            //copy content
+            copyContent: function (content, author){
+                 
+                //获取要赋值的input的元素
+                var inputElement =  document.getElementById("copy_content");
+                //给input框赋值
+                inputElement.value = content+"——"+author;
+                //选中input框的内容
+                inputElement.select();
+                // 执行浏览器复制命令
+                document.execCommand("Copy");
+                //提示已复制
+                alert('已复制');
+
+            },
+            findByKeyword: function(author) {
+                /*
+                if (wx && wx.miniProgram){
+                    wx.miniProgram.navigateTo({
+                        url: '/pages/list/list?keyword=' + author
+                    })
+                }else{
+                    window.location.href="./list.html?keyword=" + author;
+                }*/
+                //区别H5运行环境调用不同的方法
+                var ua = navigator.userAgent.toLowerCase();
+                var key = author;
+                if(ua.match(/MicroMessenger/i)=="micromessenger") {
+                    wx.miniProgram.getEnv((res)=>{
+                        if (res.miniprogram) {//在小程序
+                            console.log("走在小程序的逻辑");
+                            wx.miniProgram.navigateTo({url: '/pages/list/list?keyword=' + key})           
+                        } else {//在公众号
+                            console.log("走在公众号的逻辑");
+                            window.location.href = "./list.html?keyword=" + key;         
+                        }
+                    })
+                }else{//都不在
+                    console.log("走不在微信的逻辑");
+                    window.location.href = "./list.html?keyword=" + key;  
+                }
+                
+            },
+            //收藏
+            isFavor: function(id) {
+                return this.favIds.includes(id);
+            },
+            // localStorage 增删查
+            addOneFav: function(id){
+                var idStr = localStorage.getItem("favids");
+                if (idStr == null) idStr="";
+                idStr += (id+",");
+
+                this.favIds = idStr;
+                localStorage.setItem("favids",idStr);
+            },
+            delOneFav: function(id){
+                var idStr = localStorage.getItem("favids");
+                idStr = idStr.replace(id+",", "");
+
+                this.favIds = idStr;
+                localStorage.setItem("favids",idStr);
+            },
+            share: function(item) {
+                // var self = this;
+                // //
+                // wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
+                //     wx.updateAppMessageShareData({
+                //         title: item.author, // 分享标题
+                //         desc: item.content, // 分享描述
+                //         link: 'http://zentao.yihui.wang/v1.1/index.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                //         imgUrl: self.imgUrl+item.imgUrl, // 分享图标
+                //         success: function () {
+                //             // 设置成功
+                //             alert("chenggong");
+                //         }
+                //     })
+                // });
+
+            },
+            //跳转到小程序原生编辑页面
+            gotoUpdatePage: function(hashid){
+                if (wx && wx.miniProgram){
+                    wx.miniProgram.navigateTo({
+                        url: '/pages/editor/editor?hashid='+hashid
+                    })
+                }
+            },
+            goTouchstart(hashid) {
+                let _this = this;
+                clearTimeout(_this.timeOutEvent);
+                _this.timeOutEvent = setTimeout(function() {
+                    _this.timeOutEvent = 0;
+                    //  处理长按事件...
+                    _this.gotoUpdatePage(hashid);
+                }, 600);
+            },
+            //手如果在600毫秒内就释放，则取消长按事件
+            goTouchend(hashid) {
+                let _this = this;
+                clearTimeout(_this.timeOutEvent);
+                if (_this.timeOutEvent !== 0) {
+                    //  处理单击事件
+                }
+            },
+
+            //获取语录
+            loadMore: function () {
+                var self = this;
+
+                self.loading = true;
+                axios.get(apiHost+"/api/motto/text/findMy", {
+                    params:{
+                        page:self.page++
+                    }
+                }).then(function (response) {
+                    console.log(response.data.data);
+                    if (response.data.data == null){
+                        // alert(response.data.statusText);
+                    }else{
+                        //
+                        arr = response.data.data;
+
+                        arr.forEach(function(item){
+                            // console.log(item);
+                            self.data.push(item);
+                        });
+                        // self.loading = false;
+                        self.count = arr.length;
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            
+        }
+    })
+
+  </script>
+</body>
+</html>

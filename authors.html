@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=0">
+    <title>☀人生箴言✙，心灵充电站</title>
+    <meta name="keywords" content="人生箴言，名人名言，经典语录，励志格言，智慧格言，佛陀教言" />
+    <meta name="description" content="专注于分享古今中外的人生箴言、名人名言、经典语录等名言佳句。不求大而全，但求句句经典。人生苦短，只读经典。" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=0.4, minimum-scale=0.4, maximum-scale=0.4" /> -->
+    <link rel="stylesheet" href="/css/simple-grid.css?v=0.1a">
+    <link rel="stylesheet" href="/css/motto.css?v=1.12">
+    <link rel="shortcut icon" href="/icon/favicon.ico" type="image/x-icon" />
+    <style type="text/css">
+        * {
+            /*box-sizing: border-box;*/
+            font-size:1.7rem;
+        }
+        div.search {padding: 30px 0;}
+        div.card{
+            box-shadow:5px 5px 15px gray;
+            border-radius: 16px;
+            /* margin-bottom: 3rem; */
+        }
+
+        form {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        input, button {
+            border: none;
+            outline: none;
+        }
+
+        input {
+            width: 100%;
+            height: 2.5rem;
+            padding-left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        button {
+            height: 2.7rem;
+            width: 2.5rem;
+            cursor: pointer;
+            position: absolute;
+        }
+        /*搜索框6*/
+        .bar6 input {
+            border: 2px solid #66bb6a;
+            border-radius: 5px;
+            background: transparent;
+            top: 0;
+            right: 0;
+        }
+        .bar6 button {
+            background: #66bb6a;
+            border-radius: 0 5px 5px 0;
+            width: 5rem;
+            top: 0.07rem;
+            right: -1.2rem;
+        }
+        .bar6 button:before {
+            content: "搜索";
+            font-size: 1.5rem;
+            color: #F9F0DA;
+        }
+        .c-color-gray2 {
+            color: #9195a3;
+        }
+
+        header a:link{
+            font-size: 1.2rem;
+            color: #fff;
+            /* border:dotted 1px red; */
+            text-decoration: none;
+            margin: 0rem 0.5rem;
+            padding: 0.3rem;
+        }
+        header a:hover{
+            font-size: 1.2rem;
+            color: white;
+            background: green;
+        }
+        header a:active{
+            font-size: 1.2rem;
+            color: white;
+        }
+        header a:visited{
+            font-size: 1.2rem;
+            color: white;
+        }
+    </style>
+
+    <script src="/js/config.js"></script>
+    <script>
+        var ua = navigator.userAgent.toLowerCase();
+        var isWXWork = ua.match(/wxwork/i) == 'wxwork';//企业微信
+        var isWeixin = !isWXWork && ua.match(/micromessenger/i) == 'micromessenger';//微信
+        if (isWeixin){
+            window.location.href = "https://m.motto.plus/v1.1/index.html";
+        }
+    </script>
+
+</head>
+<body>
+    <header style="text-align: left;">
+        <div style="display: inline;"><img src="/icon/motto-logo.png" style="height:3rem" /></div>
+        <div style="display: inline;border: yellow 0px solid;position: absolute;top:0.6rem;left:15rem">
+            <a href="./index.html" >首页</a>
+            <a href="topics.html">主题</a>
+            <a href="javascript:;" style="background-color: green;">作者</a>
+            <a href="source.html">出处</a>
+            <a href="top.html">推荐</a>
+        </div>
+
+    </header>
+    <main>
+        <div class="container" style="margin-bottom: 0rem;">
+            <div class="row" style="margin-top: 4rem;">
+                <div class="col-12">
+                    <div class="search bar6">
+                        <form action="list.html" method="get">
+                            <input type="text" name="key" placeholder="">
+                            <button type="submit"></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!--按作者-->
+            <div class="row" style="margin-top: 1rem;">
+                <div class="col-12">
+                    <div class="titleleft2">&nbsp;<b>按作者</b></div>
+                </div>
+            </div>
+            <div class="row card">
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('老子')">老子</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('庄子')">庄子</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('孔子')">孔子</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('孟子')">孟子</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('诸葛亮')">诸葛亮</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('王阳明')">王阳明</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('范仲淹')">范仲淹</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('曾国藩')">曾国藩</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('毛主席')">毛主席</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('习大大')">习大大</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('鲁迅')">鲁迅</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('曹德旺')">曹德旺</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('陈果')">复旦陈果</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('蔡元培')">蔡元培</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('王凤仪')">王凤仪</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('卡耐基')">卡耐基</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('圣雄甘地')">圣雄甘地</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('稻盛和夫')">稻盛和夫</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('比尔盖茨')">比尔盖茨</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('特蕾莎修女')">特蕾莎修女</a>
+                </div>
+            </div>
+
+            <!--佛教专题-->
+            <div class="row" style="margin-top: 1rem;">
+                <div class="col-12">
+                    <div class="titleleft2">&nbsp;<b>佛教专题</b></div>
+                </div>
+            </div>
+            <div class="row card">
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('印光法师')">印光法师</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('宣化上人')">宣化上人</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('弘一法师')">弘一法师</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('慧律法师')">慧律法师</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('大安法师')">大安法师</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('梦参老和尚')">梦参老和尚</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('净空老和尚')">净空老和尚</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('虚云老和尚')">虚云老和尚</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('大宝法王')">大宝法王</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('广钦老和尚')">广钦老和尚</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('宗萨仁波切')">宗萨仁波切</a>
+                </div>
+                <div class="col-3">
+                    <a href="javascript:;" onclick="gotoList('莲花生大士')">莲花生大士</a>
+                </div>
+                <div class="col-4">
+                    <a href="javascript:;" onclick="gotoList('密勒日巴尊者')">密勒日巴尊者</a>
+                </div>
+
+            </div>
+
+            <div class="row" style="margin-top: 1rem;">
+                <div class="col-12">
+                    <div style="text-align: center;">关注服务号，发布您自己喜爱的箴言、名言、语录</div>
+                </div>
+            </div>
+            <div class="row card">
+                <div class="col-12">
+                    <img src="/icon/qrcode.jpg" style="width:100%">
+                </div>
+            </div>
+            
+        </div>
+      </main>
+       <footer><a href="https://beian.miit.gov.cn">浙ICP备19051281号-3</a></footer>
+</body>
+
+<script>
+    function gotoList(key){
+
+        if(key == null || typeof(key) == undefined){
+            key = "";
+        }
+        console.log("key:"+key);
+        window.location.href = "./list.html?keyword=" + key;
+    }
+</script>
+</html>
