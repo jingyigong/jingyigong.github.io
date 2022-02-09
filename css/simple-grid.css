@@ -206,6 +206,9 @@ p {
   .container {
     width: 90%;
   }
+  body {
+    font-size: 150%;
+  }
 }
 
 @media only screen and (min-width: 45em) {  /* 720px */
