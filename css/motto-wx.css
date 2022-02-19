@@ -1,0 +1,128 @@
+/* 手机默认可以长按选择复制，如不想长按选择，可以用以下代码取消： */
+*{
+    -webkit-touch-callout:none; /*系统默认菜单被禁用*/
+    -webkit-user-select:none; /*webkit浏览器*/
+    -khtml-user-select:none; /*早期浏览器*/
+    -moz-user-select:none;/*火狐*/
+    -ms-user-select:none; /*IE10*/
+    user-select:none;
+    /* touch-action:none; 当按住触摸目标时候，禁止或显示系统默认菜单 */
+}
+body{
+    background: whitesmoke;
+    /*background-image: url(../icon/pattern.png);*/
+    /* border: 1px green dotted; */
+    /*font-size: 1.7rem;*/
+}
+.motto_pic {
+    display:inline-block;
+    width:100%;
+    height:100%;
+    border-radius:1rem;
+}
+.topic{
+    /*font-size: 1.5rem;*/
+    color: white;
+    padding:.10em .325em;
+    height:1.5rem;
+    vertical-align: top;
+    border-radius: .5rem;
+}
+.titleleft {
+    height: 2.1rem;
+    width: 100%;
+    line-height: 2.3rem;
+    border: 0px #66bb6a dotted;
+    border-left: 0.5rem #66bb6a solid;
+}
+.titleleft2 {
+    height: 2.3rem;
+    width: 100%;
+    line-height: 2.3rem;
+    border: 0px #66bb6a dotted;
+    border-left: 0.5rem #66bb6a solid;
+    margin: 0 -2%;
+}
+a:link, a:visited {
+    color: #3377aa;
+    text-decoration: none;
+}
+a:focus, a:hover {
+    color: #000;
+    background-color: thistle;
+}
+.active{
+    font-weight: 500;
+    color:#66bb6a;
+}
+header {
+    background: #66bb6a;
+    padding: 0.5rem 0rem 0rem;
+    text-align: center;            
+    position: fixed;
+    top: 0rem;
+    z-index: 999;
+    width: 100%;
+}
+main {
+    padding: 0.5rem;
+    margin-bottom: 5rem;
+}
+footer {
+    background: #eeeeee;
+    padding: 0rem;
+    text-align: center;
+    margin-top:3rem;
+    display: inline;
+    border-top: grey 1px dotted;
+    position: fixed;
+    bottom:0rem;
+    width: 100%;    
+}
+footer a:link, footer a:visited {
+    color: #333;
+    font-weight: 300;
+    text-decoration: none;
+}
+footer a:focus, footer a:hover {
+    color: grey;
+    font-weight: 300;
+    background-color: #eee;
+}
+
+footer p{
+    line-height:0.5rem;
+    margin:0.2rem auto;
+}
+#pnav-active{
+    color:#66bb6a;
+    font-weight:500;
+}
+header a:link{
+    font-size: 1.8rem;
+    color: #fff;
+    /* border:dotted 1px red; */
+    text-decoration: none;
+    margin: 0rem 0.5rem;
+    padding: 0.3rem;
+}
+header a:hover{
+    font-size: 1.6rem;
+    color: white;
+    background: green;
+}
+header a:active{
+    font-size: 1.6rem;
+    color: white;
+}
+header a:visited{
+    font-size: 1.6rem;
+    color: white;
+}
+div.blackboard{
+    /*text-indent: 0em;*/
+    /*background-color: #255;*/
+    /*border-radius: 1rem;*/
+    padding: 0.5rem 0;
+    /*text-shadow:5px 5px 5px rgba(0,0,0,0.3);*/
+}
