@@ -53,7 +53,7 @@
     <script src="/js/config.js"></script>
 
     <!-- 公众号 JSSDK -->
-    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <!-- <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
     <script>
         // 支持微信分享标记
         var wxShareOk = false;
@@ -90,7 +90,7 @@
                     if (response.status = 200){
                         wx.config({
                             debug: false, // 调试时可开启
-                            appId: response.data.appId, // <!-- replace -->
+                            appId: response.data.appId, 
                             timestamp: response.data.timestamp, // 必填，填任意数字即可
                             nonceStr: response.data.nonceStr, // 必填，填任意非空字符串即可
                             signature: response.data.signature, // 必填，填任意非空字符串即可
@@ -151,7 +151,7 @@
         });
     }
 
-    </script>
+    </script> -->
 </head>
 <body>
     <header style="text-align: left;">
@@ -174,9 +174,9 @@
             <span @click="refresh"><i class="iconfont icon-shuaxin" style="font-size:5rem"></i></span>
         </div>
 
-            <div class="container" style="overflow:auto;margin-top:5rem;max-width: 680px;">
+            <div class="container" style="overflow:auto;margin-top:5rem;">
                 <div class="row" style="margin-top: 1rem; border-bottom:thin dashed #ccc;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);" v-for="item in data">
-                    <div class="col-11">
+                    <div class="col-12">
                         <div class="titleleft">
                             <span class="topic" style="margin-right:1rem;color:gray;" @touchstart.prevent="goTouchstart(item.id)" @touchend.prevent="goTouchend(item.id)" >{{item.updateTm}}</span>
                             <div style="display: inline;" v-if="item.topics!=''" v-for="(topic,index) in item.topics" :key="index">
@@ -184,23 +184,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-1">
+                    <!-- <div class="col-1">
                         <img style="width:2.5rem;height:2.5rem" src="/icon/share.png" @click="setShare(item.id)">
-                    </div>
+                    </div> -->
                     <div class="col-12" style="text-indent: 0em;" v-if="item.imgUrl!=''">
                         <!-- <img v-bind:src="item.imgUrl" /> -->
                         <!-- <el-image :src="imgUrl+item.imgUrl" lazy style="border-radius: 1rem;"></el-image> -->
                         <img :src="imgUrl+item.imgUrl" class="motto_pic" @dblclick="refreshImg">
                     </div>
-                    <div class="col-12" style="text-indent: 0em;background-color:#255;border-radius:1rem;padding:0.5rem 0 0.5rem 0.5rem;" v-if="item.imgUrl==''">
+                    <div class="col-12" style="text-indent: 0em;background-color:#255;border-radius:1rem;padding:1.5rem 0 1.5rem 0.5rem;" v-if="item.imgUrl==''">
                         <p style="text-align:left;color:whitesmoke;font-weight: 400;">{{ item.content }}</p>
-                        <p style="text-align:center;color:whitesmoke;font-size:medium;">——{{item.author}}</p>
+                        <p style="text-align:center;color:whitesmoke;font-size:medium;padding-top: 1.0rem;">——{{item.author}}</p>
                     </div>
 
                     <div class="col-2"></div>
                     <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem" src="/icon/copy.png"></div>
-                    <div class="col-2" v-if="!isPraise(item.id)" @click="addOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise.png"></div>
-                    <div class="col-2" v-if="isPraise(item.id)" @click="delOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise-red.png"></div>
+                    <!-- <div class="col-2" v-if="!isPraise(item.id)" @click="addOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise.png"></div>
+                    <div class="col-2" v-if="isPraise(item.id)" @click="delOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise-red.png"></div> -->
                     <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-black.png"></div>
                     <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-red.png"></div>
                     <div class="col-2"><img style="width:2.5rem;height:2.5rem" src="/icon/shiyi.png" @click="showExp(item)" v-if="item.explanation!=''"></div>
@@ -238,8 +238,8 @@
     var favIdStr = localStorage.getItem("favids");
     if (favIdStr == null) favIdStr="";
 
-    var praIdStr = localStorage.getItem("praids");
-    if (praIdStr == null) praIdStr="";
+    // var praIdStr = localStorage.getItem("praids");
+    // if (praIdStr == null) praIdStr="";
 
     var timeOutEvent = 0; //记录触摸时长
 
@@ -253,26 +253,26 @@
                 data: [],
                 imgUrl: imgUrlBase,
                 favIds: favIdStr,//收藏
-                praIds: praIdStr,//点赞
+                // praIds: praIdStr,//点赞
                 bgColors: ["#5eb95e","#3bb4f2","#0e90d2","#F37B1D","#dd514c"]
                 // total: 1
             }
         },
-        beforeCreate(){console.log('组件实例刚刚被创建');},
+        // beforeCreate(){console.log('组件实例刚刚被创建');},
 
         created(){console.log('实例已经创建完成');this.loadMore();},
 
-        beforeMount(){console.log('模板编译之前');},
+        // beforeMount(){console.log('模板编译之前');},
 
-        mounted(){console.log('模板编译之后');},
+        // mounted(){console.log('模板编译之后');},
 
-        beforeUpdate(){console.log('组件更新之前');},
+        // beforeUpdate(){console.log('组件更新之前');},
 
-        updated(){console.log('组件更新之后');},
+        // updated(){console.log('组件更新之后');},
 
-        beforeDestroy(){console.log('组件销毁之前');},
+        // beforeDestroy(){console.log('组件销毁之前');},
 
-        destroyed(){console.log('组件销毁之后');},
+        // destroyed(){console.log('组件销毁之后');},
 
         computed: {
             noMore () {
