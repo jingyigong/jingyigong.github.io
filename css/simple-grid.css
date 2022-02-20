@@ -78,6 +78,26 @@ p {
   line-height: 1.8;
 }
 
+header a{
+  font-size: 1.5rem;
+  color: white;
+}
+header a:link{        
+  /* border:dotted 1px red; */
+  text-decoration: none;
+  margin: 0 0.5rem;
+  padding: 0 0.3rem;
+}
+header a:hover{
+  /* background: green; */
+}
+header a:active{
+
+}
+header a:visited{
+
+}
+
 .color-darkgreen {
   color: darkgreen;
 }
@@ -241,6 +261,10 @@ p {
     font-size: 16px;  
     background-color: lightgreen;        
   }
+  header a{
+    font-size: 2.0rem;
+    color: white;
+  }
   .container {
     width: 95%;
   }
@@ -251,11 +275,18 @@ p {
     display: block;
   }
   .quote_text {
-      font-size: 1.5rem;
+      font-size: 2.0rem;
   }
   .quote_author {  
-      padding-top: 1.0rem;
-      font-size: 1.2rem;
+      padding-top: 1.5rem;
+      font-size: 1.5rem;
+  }
+  .topic{
+    font-size: 2.0rem;            
+    color:white;
+    padding:.10em .325em;
+    line-height:2.0rem;
+    vertical-align: top;
   }
   .col-1 {
     width: 4.33%;

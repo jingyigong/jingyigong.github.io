@@ -27,18 +27,18 @@
     /* border: 3px #66bb6a dotted; */
     border-left: 0.5rem #66bb6a solid;
 }
-a:link, a:visited {
+/* a:link, a:visited {
     color: #3377aa;
     text-decoration: none;
-}
-a:focus, a:hover {
+} */
+/* a:focus, a:hover {
     color: #000;
     background-color: thistle;
 }
 .active{
     font-weight: 500;
     color:#66bb6a;
-}
+} */
 header {
     background: #66bb6a;
     padding: 0.5rem 0rem 0rem;
