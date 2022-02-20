@@ -10,6 +10,11 @@ if (env == "pro"){
 
 
 let metaEl = document.querySelector('meta[name="viewport"]');
-const scale = 1 / window.devicePixelRatio;
+// alert(window.devicePixelRatio + "\nwindow.screen.width=" + window.screen.width);
+var scale = 1 / window.devicePixelRatio;
+if (window.devicePixelRatio > 2){
+    scale = scale * 1.5;
+}
+// alert(scale);
 if (metaEl != null)
 metaEl.setAttribute('content', `width=device-width,user-scalable=no,initial-scale=${scale},maximum-scale=${scale},minimum-scale=${scale}`);

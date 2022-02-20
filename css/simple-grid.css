@@ -17,7 +17,7 @@ body {
   padding: 0;
   left: 0;
   top: 0;
-  font-size: 100%;
+  /* font-size: 100%; */
 }
 
 /* ROOT FONT STYLES */
@@ -33,7 +33,7 @@ body {
 * { 
   font-family: 'DIN-Regular', 'PingFang SC', Helvetica, Arial, sans-serif; 
   outline:none; 
-  color: #333447;
+  color: black;
   line-height: 1.5;
   margin:0; 
   padding:0; 
@@ -78,6 +78,16 @@ p {
   line-height: 1.8;
 }
 
+.color-darkgreen {
+  color: darkgreen;
+}
+.color-whitesmoke {
+  color: whitesmoke;
+}
+.color-black {
+  color: black;
+}
+
 .font-light {
   font-weight: 300;
 }
@@ -113,7 +123,7 @@ p {
 /* ==== GRID SYSTEM ==== */
 
 .container {
-  width: 90%;
+  width: 95%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -202,16 +212,51 @@ p {
   display: none;
 }
 
+.show_menu {
+  display: none;
+}
+.show_sidebar {
+  display: none;
+}
+
 @media only screen and (min-width: 33.75em) {  /* 540px */
-  .container {
-    width: 90%;
+  html,body {
+    font-size: 16px;  
+    background-color: lightcoral;        
   }
-  body {
-    font-size: 150%;
+  .container {
+    width: 95%;
+  }
+  .quote_text {
+    font-size: 1.5rem;
+  }
+  .quote_author {  
+      padding-top: 1.0rem;
+      font-size: 1.2rem;
   }
 }
 
 @media only screen and (min-width: 45em) {  /* 720px */
+  html,body {
+    font-size: 16px;  
+    background-color: lightgreen;        
+  }
+  .container {
+    width: 95%;
+  }
+  .show_menu {
+      display: block;
+  }
+  .show_sidebar {
+    display: block;
+  }
+  .quote_text {
+      font-size: 1.5rem;
+  }
+  .quote_author {  
+      padding-top: 1.0rem;
+      font-size: 1.2rem;
+  }
   .col-1 {
     width: 4.33%;
   }
@@ -266,8 +311,26 @@ p {
 }
 
 @media only screen and (min-width: 60em) { /* 960px */
+  html,body {
+    font-size: 16px;  
+    background-color: lightskyblue;        
+  }
   .container {
     width: 95%;
-    max-width: 60rem; 
+    max-width: 860px; 
+  }
+  .quote_text {
+      font-size: 1.5rem;
+  }
+  .quote_author {  
+      padding-top: 1.0rem;
+      font-size: 1.2rem;
+  }
+}
+
+@media only screen and (min-width: 67.5em) { /* 1080px */
+  html,body {
+    font-size: 16px;  
+    background-color: lightgoldenrodyellow;        
   }
 }

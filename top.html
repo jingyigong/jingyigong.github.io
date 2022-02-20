@@ -1,46 +1,44 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=0">
-    <title>☀人生箴言✙，心灵充电站</title>
-    <meta name="keywords" content="人生箴言，名人名言，经典语录，励志格言，智慧格言，佛陀教言" />
-    <meta name="description" content="专注于分享古今中外的人生箴言、名人名言、经典语录等名言佳句。不求大而全，但求句句经典。人生苦短，只读经典。" />
-    <link rel="stylesheet" media="screen and (min-width: 860px)" href="/css/simple-grid.css">
-    <link rel="stylesheet" media="screen and (min-width: 860px)" href="/css/motto.css">
-    <link rel="stylesheet" media="screen and (max-width: 860px)" href="/css/simple-grid-wx.css">
-    <link rel="stylesheet" media="screen and (max-width: 860px)" href="/css/motto-wx.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_2712475_8fcrxfexvp4.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=1">
+<title>☀人生箴言✙，心灵充电站</title>
+<meta name="keywords" content="人生箴言，名人名言，经典语录，励志格言，智慧格言，佛陀教言" />
+<meta name="description" content="专注于分享古今中外的人生箴言、名人名言、经典语录等名言佳句。不求大而全，但求句句经典。人生苦短，只读经典。" />
+<link rel="stylesheet" media="screen and (min-width: 0px)" href="/css/simple-grid.css">
+<link rel="stylesheet" media="screen and (min-width: 0px)" href="/css/motto.css">
+<!-- <link rel="stylesheet" media="screen and (max-width: 860px)" href="/css/simple-grid-wx.css">
+<link rel="stylesheet" media="screen and (max-width: 860px)" href="/css/motto-wx.css"> -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_2712475_8fcrxfexvp4.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <link rel="shortcut icon" href="/icon/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/icon/favicon.ico" type="image/x-icon" />
 
-    <style type="text/css">
-        p {
-            text-align: center;
-        }
-        header a:link{
-            font-size: 1.2rem;
-            color: #fff;
-            /* border:dotted 1px red; */
-            text-decoration: none;
-            margin: 0rem 0.5rem;
-            padding: 0.3rem;
-        }
-        header a:hover{
-            font-size: 1.2rem;
-            color: white;
-            background: green;
-        }
-        header a:active{
-            font-size: 1.2rem;
-            color: white;
-        }
-        header a:visited{
-            font-size: 1.2rem;
-            color: white;
-        }
-    </style>
+<style type="text/css">
+    header a:link{
+        font-size: 1.5rem;
+        color: white;
+        /* border:dotted 1px red; */
+        text-decoration: none;
+        margin: 0 0.5rem;
+        padding: 0 0.3rem;
+    }
+    header a:hover{
+        font-size: 1.5rem;
+        color: white;
+        background: green;
+    }
+    header a:active{
+        font-size: 1.5rem;
+        color: white;
+    }
+    header a:visited{
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+</style>
     <!-- 引入样式 -->
     <!-- <link rel="stylesheet" href="/css/element-ui@2.14.1/index.css"> -->
     <!-- 引入组件库 -->
@@ -50,124 +48,25 @@
     <!-- <script src="/js/element-ui@2.14.1/index.js"></script> -->
     <script src="/js/axios.min.js"></script>
     <script src="/js/config.js"></script>
-
-    <!-- 公众号 JSSDK -->
-    <!-- <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
-    <script>
-        // 支持微信分享标记
-        var wxShareOk = false;
-        var isWeixin = false;
-
-        function docReady(fn) {
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                fn()
-            } else {
-                document.addEventListener('DOMContentLoaded', fn);
-            }
-        }
-
-        docReady(async function() {
-            var ua = navigator.userAgent.toLowerCase()
-            var isWXWork = ua.match(/wxwork/i) == 'wxwork'
-            isWeixin = !isWXWork && ua.match(/micromessenger/i) == 'micromessenger'
-            var isMobile = false
-            var isDesktop = false
-            if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|IEMobile)/i)) {
-                isMobile = true
-            } else {
-                isDesktop = true
-            }
-
-            if (isWeixin) {
-                window.location.href = "https://m.motto.plus/v1.1/top.html";
-                return;
-
-                axios.get(apiHost+"/wx/getWxConfig", {
-                    params: { 'fr': window.location.href }
-                }).then(function (response) {
-                    console.log(response);
-                    if (response.status = 200){
-                        wx.config({
-                            debug: false, // 调试时可开启
-                            appId: response.data.appId, 
-                            timestamp: response.data.timestamp, // 必填，填任意数字即可
-                            nonceStr: response.data.nonceStr, // 必填，填任意非空字符串即可
-                            signature: response.data.signature, // 必填，填任意非空字符串即可
-                            jsApiList: ['updateAppMessageShareData','updateTimelineShareData'] // 必填，随意一个接口即可
-                        })
-                    }
-                    // alert(''.concat(response.data, '\r\n', response.status, '\r\n', response.statusText, '\r\n', response.headers, '\r\n', response.config));
-                }).catch(function (error) {
-                    alert(error);
-                });
-
-
-            } else if (isDesktop) {
-                // 在 pc 上则给提示引导到手机端打开
-            }  else {
-            }
-        })
-
-        if (isWeixin){
-        //通过ready接口处理成功验证
-        wx.ready(function(){
-            console.log("wx.ready invoked");
-            wxShareOk = true;
-            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，
-            // config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，
-            // 则须把相关接口放在ready函数中调用来确保正确执行。
-            // 对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
-
-            //自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
-            //需在用户可能点击分享按钮前就先调用
-            wx.updateAppMessageShareData({
-                title: '☀人生箴言✙，心灵充电站', // 分享标题
-                desc: '人生苦短，只读经典', // 分享描述
-                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: 'https://m.motto.plus/icon/anxin.jpeg', // 分享图标
-                success: function () {
-                    // 设置成功
-                }
-            });
-
-            //自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
-            //需在用户可能点击分享按钮前就先调用
-            wx.updateTimelineShareData({
-                title: '☀人生箴言✙，心灵充电站', // 分享标题
-                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: 'https://m.motto.plus/icon/anxin.jpeg', // 分享图标
-                success: function () {
-                    // 设置成功
-                }
-            })
-        });
-
-        //通过error接口处理失败验证
-        wx.error(function(res){
-            // config信息验证失败会执行error函数，如签名过期导致验证失败，
-            // 具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-            alert("wx.error\r\n"+JSON.stringify(res));
-        });
-    }
-
-    </script> -->
 </head>
 <body>
-    <header style="text-align: left;">
-        <div style="display: inline;"><img src="/icon/motto-logo.png" style="height:3rem" /></div>
-        <div style="display: inline;border: yellow 0px solid;position: absolute;top:0.6rem;left:15rem">
+    <header style="text-align:left; line-height:4rem; height:4rem;">        
+        <div style="display: inline-block;height:3rem;line-height:3rem;">
+            <img src="/icon/motto-logo.png" style="height:3rem" />
+        </div>
+        <div class="show_menu" style="position:absolute; bottom:20%; left:7rem; transform: translateX(7rem) translateY(-20%);">
             <a href="index.html" >首页</a>
             <a href="topics.html">主题</a>
             <a href="authors.html">作者</a>
             <a href="source.html">出处</a>
-            <a href="javascript:;" style="background-color: green;">推荐</a>
+            <a href="javascript:;" style="background: green;">推荐</a>
         </div>
 
     </header>
 
     <div id="app">
 
-        <div style="z-index:999;position:fixed;bottom:10rem;right:1rem;width:fit-content;height:fit-content;">
+        <div class="show_sidebar" style="z-index:999;position:fixed;bottom:10rem;right:1rem;width:fit-content;height:fit-content;">
             <span @click="goHome"><i class="iconfont icon-shouye" style="font-size:5rem"></i></span><br/>
             <span @click="goTop"><i class="iconfont icon-dingbu" style="font-size:5rem"></i></span><br/>
             <span @click="refresh"><i class="iconfont icon-shuaxin" style="font-size:5rem"></i></span>
@@ -191,25 +90,27 @@
                         <!-- <el-image :src="imgUrl+item.imgUrl" lazy style="border-radius: 1rem;"></el-image> -->
                         <img :src="imgUrl+item.imgUrl" class="motto_pic" @dblclick="refreshImg">
                     </div>
-                    <div class="col-12" style="text-indent: 0em;background-color:#255;border-radius:1rem;padding:1.5rem 0 1.5rem 0.5rem;" v-if="item.imgUrl==''">
-                        <p style="text-align:left;color:whitesmoke;font-weight: 400;">{{ item.content }}</p>
-                        <p style="text-align:center;color:whitesmoke;font-size:medium;padding-top: 1.0rem;">——{{item.author}}</p>
+                    <div class="col-12" style="text-indent: 0em;background-color:#255;border-radius:1rem;padding:1.5rem 0.3rem 1.5rem 0.8rem;" v-if="item.imgUrl==''">
+                        <p class="quote_text font-regular left color-whitesmoke" >{{ item.content }}</p>
+                        <p class="quote_author font-light center color-whitesmoke" >——{{item.author}}</p>
                     </div>
 
-                    <div class="col-2"></div>
-                    <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem" src="/icon/copy.png"></div>
-                    <!-- <div class="col-2" v-if="!isPraise(item.id)" @click="addOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise.png"></div>
-                    <div class="col-2" v-if="isPraise(item.id)" @click="delOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise-red.png"></div> -->
-                    <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-black.png"></div>
-                    <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-red.png"></div>
-                    <div class="col-2"><img style="width:2.5rem;height:2.5rem" src="/icon/shiyi.png" @click="showExp(item)" v-if="item.explanation!=''"></div>
-                    <div class="col-2"></div>
+                    <div class="row show_sidebar">
+                        <div class="col-2"></div>
+                        <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem" src="/icon/copy.png"></div>
+                        <!-- <div class="col-2" v-if="!isPraise(item.id)" @click="addOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise.png"></div>
+                        <div class="col-2" v-if="isPraise(item.id)" @click="delOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise-red.png"></div> -->
+                        <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-black.png"></div>
+                        <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-red.png"></div>
+                        <div class="col-2"><img style="width:2.5rem;height:2.5rem" src="/icon/shiyi.png" @click="showExp(item)" v-if="item.explanation!=''"></div>
+                        <div class="col-4"></div>
+                    </div>
                 </div>
 
                 <!-- <p v-if="loading">加载中...</p> -->
                 <p style="line-height: 1rem;">&nbsp;</p>
                 <p v-if="noMore">—— 没有更多了 ——</p>
-                <p v-else @click="loadMore();" style="font-weight: 400;color: red;">点击浏览更多☟</p>                
+                <p v-else @click="loadMore();" class="center font-regular color-black">点击浏览更多☟</p>                
                 <p style="line-height: 5rem;">&nbsp;</p>
             </div>
 

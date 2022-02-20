@@ -8,10 +8,6 @@
     user-select:none;
     /* touch-action:none; 当按住触摸目标时候，禁止或显示系统默认菜单 */
 }
-body{
-    background: #fbfbfb;
-    /* border: 1px green dotted; */
-}
 .motto_pic {
     display:inline-block;
     width:100%;
