@@ -8,6 +8,11 @@
     user-select:none;
     /* touch-action:none; 当按住触摸目标时候，禁止或显示系统默认菜单 */
 }
+/* 以上代码也会禁止输入框的使用，可用以下代码解决：*/
+input,textarea {
+    user-select: auto;
+    -webkit-user-select: auto; /*webkit browser*/
+}
 .motto_pic {
     display:inline-block;
     width:100%;
