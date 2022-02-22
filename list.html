@@ -63,7 +63,16 @@
                         <p class="quote_author font-light center color-black" >——{{item.author}}</p>
                     </div>
 
-                </div>
+                    <div class="row show_sidebar">
+                        <div class="col-2"></div>
+                        <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem" src="/icon/copy.png"></div>
+                        <!-- <div class="col-2" v-if="!isPraise(item.id)" @click="addOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise.png"></div>
+                        <div class="col-2" v-if="isPraise(item.id)" @click="delOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise-red.png"></div> -->
+                        <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-black.png"></div>
+                        <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-red.png"></div>
+                        <div class="col-2"><img style="width:2.5rem;height:2.5rem" src="/icon/shiyi.png" @click="showExp(item)" v-if="item.explanation!=''"></div>
+                        <div class="col-4"></div>
+                    </div>                </div>
 
                 <!-- <p v-if="loading">加载中...</p> -->
                 <p style="line-height: 1rem;">&nbsp;</p>
@@ -73,7 +82,9 @@
             </div>
 
       </div>
-    
+      <input id="copy_content" type="text" value=""  style="position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;"/>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>    
     <script>
     //暂时未用
     var key='';
@@ -91,6 +102,9 @@
     var pageIndex = localStorage.getItem(href);
     if (pageIndex == null) pageIndex=1;
 
+    var favIdStr = localStorage.getItem("favids");
+    if (favIdStr == null) favIdStr="";
+
     var timeOutEvent = 0; //记录触摸时长 
 
     new Vue({
@@ -102,6 +116,7 @@
                 page: pageIndex,
                 data: [],
                 imgUrl: imgUrlBase,
+                favIds: favIdStr,//收藏
                 bgColors: ["#5eb95e","#3bb4f2","#0e90d2","#F37B1D","#dd514c"]
                 // total: 1
             }
@@ -134,8 +149,43 @@
 
                 e.target.src = ((e.target.src).split("?"))[0]+"?"+Math.ceil(Math.random()*100);
             },
+            //copy content
+            copyContent: function (content, author){
+        
+                 //获取要赋值的input的元素
+                 var inputElement =  document.getElementById("copy_content");
+                 //给input框赋值
+                 inputElement.value = content+"——"+author;
+                 //选中input框的内容
+                 inputElement.select();
+                 // 执行浏览器复制命令
+                 document.execCommand("Copy");
+                 //提示已复制
+                 alert('已复制');
+ 
+             },
             findByKeyword: function(key) {
                 window.location.href = "./list.html?keyword=" + key;           
+            },
+            //收藏
+            isFavor: function(id) {
+                return this.favIds.includes(id);
+            },
+            // localStorage 增删查
+            addOneFav: function(id){
+                var idStr = localStorage.getItem("favids");
+                if (idStr == null) idStr="";
+                idStr += (id+",");
+
+                this.favIds = idStr;
+                localStorage.setItem("favids",idStr);
+            },
+            delOneFav: function(id){
+                var idStr = localStorage.getItem("favids");
+                idStr = idStr.replace(id+",", "");
+
+                this.favIds = idStr;
+                localStorage.setItem("favids",idStr);
             },
             //跳转到编辑页面
             gotoUpdatePage: function(hashid){
