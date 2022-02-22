@@ -67,20 +67,20 @@
                         <!-- <el-image :src="imgUrl+item.imgUrl" lazy style="border-radius: 1rem;"></el-image> -->
                         <img :src="imgUrl+item.imgUrl" class="motto_pic" @dblclick="refreshImg">
                     </div>
-                    <div class="col-12 blackboard" v-if="item.imgUrl==''">
-                        <p class="quote_text font-regular left color-whitesmoke" >{{ item.content }}</p>
-                        <p class="quote_author font-light center color-whitesmoke" >——{{item.author}}</p>
+                    <div class="col-12">
+                        <p class="quote_text font-regular left color-black" >{{ item.content }}</p>
+                        <p class="quote_author font-light center color-black" >——{{item.author}}</p>
                     </div>
 
-                    <div class="row show_sidebar">
+                    <div class="row">
                         <div class="col-2"></div>
                         <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem" src="/icon/copy.png"></div>
-                        <!-- <div class="col-2" v-if="!isPraise(item.id)" @click="addOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise.png"></div>
-                        <div class="col-2" v-if="isPraise(item.id)" @click="delOnePra(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/praise-red.png"></div> -->
+                        <div class="col-2" v-if="item.imgUrl==''"></div>
+                        <div class="col-2" v-if="item.imgUrl!=''"><a :href="imgUrl+item.imgUrl" download><img style="width:2.5rem;height:2.5rem" src="/icon/cloud-download.png"></a></div>
                         <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-black.png"></div>
                         <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-red.png"></div>
                         <div class="col-2"><img style="width:2.5rem;height:2.5rem" src="/icon/shiyi.png" @click="showExp(item)" v-if="item.explanation!=''"></div>
-                        <div class="col-4"></div>
+                        <div class="col-2"></div>
                     </div>
                 </div>
 
