@@ -18,3 +18,13 @@ if (window.devicePixelRatio > 2){
 // alert(scale);
 if (metaEl != null)
 metaEl.setAttribute('content', `width=device-width,user-scalable=no,initial-scale=${scale},maximum-scale=${scale},minimum-scale=${scale}`);
+
+
+function toggleMenu() {
+    var x = document.getElementById("menuLinks");
+    if (x.style.display === "block") {
+        x.style.display = "none";
+    } else {
+        x.style.display = "block";
+    }
+}
