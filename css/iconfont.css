@@ -1,49 +1,51 @@
 @font-face {
-    font-family: "iconfont"; /* Project id 2712475 */
-    src: url('//at.alicdn.com/t/font_2712475_pzzzjh51xb.woff2?t=1646991354546') format('woff2'),
-         url('//at.alicdn.com/t/font_2712475_pzzzjh51xb.woff?t=1646991354546') format('woff'),
-         url('//at.alicdn.com/t/font_2712475_pzzzjh51xb.ttf?t=1646991354546') format('truetype');
-    font-display: swap;
-  }
-  
-  .iconfont {
-    font-family: "iconfont" !important;
-    font-size: 16px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  .icon-menu:before {
-    content: "\e628";
-  }
-  
-  .icon-menu1:before {
-    content: "\e615";
-  }
-  
-  .icon-menu2:before {
-    content: "\e6a6";
-  }
-  
-  .icon-menu3:before {
-    content: "\e677";
-  }
-  
-  .icon-dingbu:before {
-    content: "\e670";
-  }
-  
-  .icon-huidaodingbu2:before {
-    content: "\e60f";
-  }
-  
-  .icon-shuaxin:before {
-    content: "\e828";
-  }
-  
-  .icon-shouye:before {
-    content: "\e763";
-  }
-  
-  
+  font-family: "iconfont"; /* Project id 2712475 */
+  src: url('//at.alicdn.com/t/font_2712475_tf4eku2ghk.woff2?t=1647010318063') format('woff2'),
+        url('//at.alicdn.com/t/font_2712475_tf4eku2ghk.woff?t=1647010318063') format('woff'),
+        url('//at.alicdn.com/t/font_2712475_tf4eku2ghk.ttf?t=1647010318063') format('truetype');
+  font-display: swap;
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-quoteright:before {
+  content: "\ebcb";
+}
+
+.icon-menu:before {
+  content: "\e628";
+}
+
+.icon-menu1:before {
+  content: "\e615";
+}
+
+.icon-menu2:before {
+  content: "\e6a6";
+}
+
+.icon-menu3:before {
+  content: "\e677";
+}
+
+.icon-dingbu:before {
+  content: "\e670";
+}
+
+.icon-huidaodingbu2:before {
+  content: "\e60f";
+}
+
+.icon-shuaxin:before {
+  content: "\e828";
+}
+
+.icon-shouye:before {
+  content: "\e763";
+}
