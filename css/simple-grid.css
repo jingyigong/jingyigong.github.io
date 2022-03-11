@@ -17,11 +17,10 @@ body {
   padding: 0;
   left: 0;
   top: 0;
-  /* font-size: 100%; */
 }
 
 /* ROOT FONT STYLES */
-@font-face {
+/* @font-face {
   font-family: 'DIN-Regular'; 
   src: url('/fonts/DINPro-Regular.otf') format('opentype');
 }
@@ -29,20 +28,14 @@ body {
   font-family: 'DIN-Regular'; 
   src: url('/fonts/DINPro-Bold.otf') format('opentype');
   font-weight: bold; 
-}
+} */
 * { 
-  font-family: 'DIN-Regular', 'PingFang SC', Helvetica, Arial, sans-serif; 
+  font-family:'PingFang SC', "Microsoft YaHei", 'DIN-Regular', Helvetica, Arial, sans-serif; 
   outline:none; 
   color: black;
-  line-height: 1.5;
   margin:0; 
   padding:0; 
 }
-/* * {
-  font-family: 'DIN-Regular',"PingFang SC",Arial,"Microsoft YaHei",sans-serif;
-  color: #333447;
-  line-height: 1.5;
-} */
 span {
   color: white;
 }
@@ -85,8 +78,8 @@ header a{
 header a:link{        
   /* border:dotted 1px red; */
   text-decoration: none;
-  margin: 0 0.5rem;
-  padding: 0 0.3rem;
+  /* margin: 0 0.5rem; */
+  padding: 0 0.8rem;
 }
 header a:hover{
   /* background: green; */

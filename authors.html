@@ -6,8 +6,9 @@
     <title>☀人生箴言✙，心灵充电站</title>
     <meta name="keywords" content="人生箴言，名言警句，励志句子，智慧格言，圣贤语录，佛陀教言" />
     <meta name="description" content="专注于分享古今中外圣贤哲人智士有关陶冶身心、涵养德性、修身养性等的语录句子。" />
-    <link rel="stylesheet" href="/css/motto.css">
+    <link rel="stylesheet" href="/css/motto.css?abc">
     <link rel="stylesheet" href="/css/simple-grid.css">
+    <link rel="stylesheet" href="./css/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="/icon/favicon.ico" type="image/x-icon" />
     <style type="text/css">
         * {
@@ -74,27 +75,78 @@
         main a:focus, main a:hover {
             color: #000;
             background-color: thistle;
-        }    
+        }  
+        
+
+        #breadcrumbDiv {    
+            position: absolute;
+            top:4rem;
+            width:100%;
+            line-height: 4rem;
+            z-index: 1;
+        }
+        /* Style the list */
+        ul.breadcrumb {
+        padding: 0px 16px;
+        list-style: none;
+        background-color: #eee;
+        }
+
+        /* Display list items side by side */
+        ul.breadcrumb li {
+        display: inline;
+
+        }
+
+        /* Add a slash symbol (/) before/behind each list item */
+        ul.breadcrumb li+li:before {
+        padding: 0 8px;
+        color: black;
+        content: "/\00a0";
+        }
+
+        /* Add a color to all links inside the list */
+        ul.breadcrumb li a {
+        color: #0275d8;
+        text-decoration: none;
+        }
+
+        /* Add a color on mouse-over */
+        ul.breadcrumb li a:hover {
+        color: #01447e;
+        text-decoration: underline;
+        }
     </style>
 
     <script src="/js/config.js"></script>
 
 </head>
 <body>
-    <header style="text-align:left; line-height:4rem; height:4rem;">
-        <div style="display: inline-block;height:3.5rem;line-height:3.5rem;">
-            <a href="index.html"><img src="/icon/motto-logo.png" style="height:3.5rem" /></a>
+    <header style="text-align:center; line-height:4rem; height:4rem;">
+        <div style="display: inline-block;height:4rem;line-height:4rem;">
+            <a href="index.html"><img src="/icon/motto-logo.png" style="height:4rem" /></a>
+            <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+                <i class="fa fa-bars"></i>
+            </a>
         </div>
-        <div class="show_menu" style="position:absolute; bottom:10%; left:8rem; transform: translateX(8rem) translateY(-10%);">
-            <a href="topics.html" >主题</a>
-            <a href="javascript:;" class="active">作者</a>
-            <a href="top.html">推荐</a>
+        <div id="menuLinks">
+            <a href="index.html">首页</a>
+            <a href="topics.html">话题</a>
+            <a href="authors.html">作者</a>
+            <a href="#quote_of_the_day">今日推荐</a>
+            <a href="top.html">TOP100</a>
         </div>
-
+        <!-- <div id="breadcrumbDiv">
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a></li>
+                <li>作者</li>
+            </ul>
+        </div> -->
     </header>
+
     <main>
         <div class="container" style="margin-bottom: 0rem;">
-            <div class="row" style="margin-top: 4rem;">
+            <div class="row" style="margin-top: 8rem;">
                 <div class="col-12">
                     <div class="search bar6">
                         <form action="list.html" method="get">

@@ -13,6 +13,25 @@ input,textarea {
     user-select: auto;
     -webkit-user-select: auto; /*webkit browser*/
 }
+
+#menuLinks {
+    display: none;
+    background-color: #66bb6a;
+    position: absolute;
+    top:4rem;
+    width:100%;
+    z-index: 10;
+}
+
+header a.icon {
+    background: whitesmoke;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    line-height:4rem; 
+}
+
 .motto_pic {
     display:inline-block;
     width:100%;
@@ -35,8 +54,8 @@ input,textarea {
 
 header {
     background: #66bb6a;
-    padding: 0.5rem 0rem 0rem;
-    text-align: center;            
+    /* padding: 0.5rem 0rem 0rem;
+    text-align: center;             */
     position: fixed;
     top: 0rem;
     z-index: 999;
