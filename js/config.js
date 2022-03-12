@@ -5,6 +5,10 @@ var imgUrlBase = "http://192.168.0.123/img/";
 if (env == "pro"){
     apiHost = "https://api.motto.plus";
     imgUrlBase = "https://img.motto.plus/img/";
+
+    if (location.protocol !== 'https:' && location.indexOf('motto.plus') != -1) {
+        location.replace(`https:${location.href.substring(location.protocol.length)}`);
+    }
 }
 
 let metaEl = document.querySelector('meta[name="viewport"]');
