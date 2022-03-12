@@ -1,14 +1,20 @@
-var env = "pro";//"pro"
+var env = "dev";
 var apiHost = "http://192.168.0.123:8080";
 var imgUrlBase = "http://192.168.0.123/img/";
-
-if (env == "pro"){
+if (window.location.hostname.indexOf('motto.plus') != -1){
+    env == "pro";
     apiHost = "https://api.motto.plus";
     imgUrlBase = "https://img.motto.plus/img/";
 
-    if (location.protocol !== 'https:' && location.indexOf('motto.plus') != -1) {
-        location.replace(`https:${location.href.substring(location.protocol.length)}`);
+    // 判断非本地server时 http强制转换成https
+    var targetProtocol = "https:";
+    if (window.location.protocol != targetProtocol){
+        window.location.href = targetProtocol + window.location.href.substring(window.location.protocol.length);
     }
+}else{
+    env == "dev";
+    apiHost = "https://api.motto.plus";
+    imgUrlBase = "https://img.motto.plus/img/";
 }
 
 let metaEl = document.querySelector('meta[name="viewport"]');
