@@ -4,10 +4,8 @@ var imgUrlBase = "http://192.168.0.123/img/";
 
 if (env == "pro"){
     apiHost = "https://api.motto.plus";
-    imgUrlBase = "https://motto-plus.oss-cn-shanghai.aliyuncs.com/img/";
+    imgUrlBase = "https://img.motto.plus/img/";
 }
-
-
 
 let metaEl = document.querySelector('meta[name="viewport"]');
 // alert(window.devicePixelRatio + "\nwindow.screen.width=" + window.screen.width);
