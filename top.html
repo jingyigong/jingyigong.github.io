@@ -23,7 +23,7 @@
 
 <!-- 引入组件库 -->
 <!-- import Vue before Element -->
-<script src="/js/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 
 <script src="/js/axios.min.js"></script>
 <script src="/js/config.js"></script>
@@ -74,7 +74,7 @@
                     <div class="col-12" style="text-indent: 0em;" v-if="item.imgUrl!=''">
                         <!-- <img v-bind:src="item.imgUrl" /> -->
                         <!-- <el-image :src="imgUrl+item.imgUrl" lazy style="border-radius: 1rem;"></el-image> -->
-                        <img :src="imgUrl+item.imgUrl+'?x-oss-process=image/resize,m_fixed,h_540,w_960'" class="motto_pic" @dblclick="refreshImg">
+                        <img :src="imgUrl+item.imgUrl+'?x-oss-process=image/resize,m_fixed,h_540,w_960/format,webp'" class="motto_pic" @dblclick="refreshImg">
                     </div>
                     <div class="col-12">
                         <p class="quote_text font-regular left color-black" >{{ item.content }}</p>
