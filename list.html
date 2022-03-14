@@ -13,7 +13,13 @@
     <link rel="shortcut icon" href="/icon/quote-right-32x32.png" type="image/png" />
     <link rel="preconnect" href="https://api.motto.plus">
     <style type="text/css">
-
+        .more-result{
+            cursor:pointer;
+            background-color: rgba(34,34,34,0.1);
+            border: none !important;
+            border-radius:1rem;
+            font-size: 2rem;
+        }
     </style>
 
     <!-- 引入组件库 -->
@@ -48,16 +54,16 @@
     <div id="app">
 
         <div class="show_sidebar" style="z-index:999;position:fixed;bottom:10rem;right:1rem;width:fit-content;height:fit-content;">
-            <span @click="goHome"><i class="iconfont icon-shouye" style="font-size:5rem"></i></span><br/>
-            <span @click="goTop"><i class="iconfont icon-dingbu" style="font-size:5rem"></i></span><br/>
-            <span @click="refresh"><i class="iconfont icon-shuaxin" style="font-size:5rem"></i></span>
+            <span @click="goHome"><i class="iconfont icon-shouye" style="font-size:5rem;cursor:pointer;"></i></span><br/>
+            <span @click="goTop"><i class="iconfont icon-dingbu" style="font-size:5rem;cursor:pointer;"></i></span><br/>
+            <span @click="refresh"><i class="iconfont icon-shuaxin" style="font-size:5rem;cursor:pointer;"></i></span>
         </div>
            
             <div class="container" style="overflow:auto;margin-top:5rem;">
                 <div class="row" style="margin-top: 1rem; border-bottom:thin dashed #ccc;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);" v-for="item in data">
                     <div class="col-12">
-                        <div class="titleleft">
-                            <span class="topic" style="margin-right:1rem;color:gray;" @touchstart.prevent="goTouchstart(item.id)" @touchend.prevent="goTouchend(item.id)" >{{item.updateTm}}</span>
+                        <div>
+                            <span style="font-size:1.25rem;color:gray;margin-right:1rem;" @touchstart.prevent="goTouchstart(item.id)" @touchend.prevent="goTouchend(item.id)" >▍{{item.updateTm}}</span>
                             <div style="display: inline;" v-if="item.topics!=''" v-for="(topic,index) in item.topics" :key="index">
                                 <span class="topic" :style="{'background-color':bgColors[index % bgColors.length]}">{{topic}}</span>&nbsp;
                             </div>
@@ -74,12 +80,12 @@
 
                     <div class="row">
                         <div class="col-2"></div>
-                        <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem" src="/icon/copy.png"></div>
+                        <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem;cursor:pointer;" src="/icon/copy.png"></div>
                         <div class="col-2" v-if="item.imgUrl==''"></div>
                         <div class="col-2" v-if="item.imgUrl!=''"><a :href="imgUrl+item.imgUrl" download><img style="width:2.5rem;height:2.5rem" src="/icon/cloud-download.png"></a></div>
-                        <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-black.png"></div>
-                        <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem" src="/icon/fav-red.png"></div>
-                        <div class="col-2"><img style="width:2.5rem;height:2.5rem" src="/icon/shiyi.png" @click="showExp(item)" v-if="item.explanation!=''"></div>
+                        <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem;cursor:pointer;" src="/icon/fav-black.png"></div>
+                        <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem;cursor:pointer;" src="/icon/fav-red.png"></div>
+                        <div class="col-2"><img style="width:2.5rem;height:2.5rem;cursor:pointer;" src="/icon/shiyi.png" @click="showExp(item)" v-if="item.explanation!=''"></div>
                         <div class="col-2"></div>
                     </div>                
                 </div>
@@ -87,7 +93,7 @@
                 <!-- <p v-if="loading">加载中...</p> -->
                 <p style="line-height: 1rem;">&nbsp;</p>
                 <p v-if="noMore" class="center">—— 没有更多了 ——</p>
-                <p v-else @click="loadMore();" class="center font-regular color-black">点击浏览更多☟</p>
+                <p v-else @click="loadMore();" class="center font-regular color-black more-result">更多结果☟</p>
                 <p style="line-height: 5rem;">&nbsp;</p>
             </div>
 

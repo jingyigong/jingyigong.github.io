@@ -274,8 +274,7 @@ header a:hover i{
   .topic{           
     color:white;
     padding:.10em .325em;
-    /* line-height:2.0rem;
-    vertical-align: top; */
+    font-size: 1.25rem;
   }
   .col-1 {
     width: 4.33%;

@@ -39,19 +39,6 @@ header a.icon {
     height:100%;
     border-radius:1rem;
 }
-.topic{
-    font-size: 1.2rem;            
-    /* color:white;
-    padding:.10em .325em;
-    height:1.5rem;
-    vertical-align: top; */
-}
-.titleleft {
-    height: 1.5rem;
-    margin-bottom: 0.5rem;
-    /* border: 3px #66bb6a dotted; */
-    border-left: 0.5rem #66bb6a solid;
-}
 
 header {
     background: #66bb6a;
