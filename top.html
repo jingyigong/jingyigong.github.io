@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_2712475_pzzzjh51xb.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <link rel="shortcut icon" href="/icon/quote-right-32x32.png" type="image/png" />
-
+<link rel="preconnect" href="https://api.motto.plus">
 <style type="text/css">
     .blackboard {
         text-indent: 0em;
@@ -285,7 +285,8 @@
                 axios.get(apiHost+"/api/motto/text/find", {
                     params:{
                         page:self.page++,
-                        keyword:key
+                        keyword:key,
+                        size:5
                     }
                 }).then(function (response) {
                     console.log(response.data.data);
