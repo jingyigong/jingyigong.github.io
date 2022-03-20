@@ -25,7 +25,7 @@ if (window.devicePixelRatio > 2){
 }
 // alert(scale);
 if (metaEl != null)
-metaEl.setAttribute('content', `width=device-width,initial-scale=${scale},maximum-scale=${scale},minimum-scale=${scale}`);
+metaEl.setAttribute('content', `width=device-width,initial-scale=${scale}`);
 
 
 function toggleMenu() {
