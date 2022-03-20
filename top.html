@@ -63,7 +63,7 @@
                 <div class="row" style="margin-top: 1rem; border-bottom:thin dashed #ccc;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);" v-for="item in data">
                     <div class="col-12">
                         <div>
-                            <span style="font-size:1.25rem;margin-right:1rem;color:gray;" @touchstart.prevent="goTouchstart(item.id)" @touchend.prevent="goTouchend(item.id)" >▍{{item.updateTm}}</span>
+                            <span style="font-size:1.25rem;margin-right:1rem;color:#333;" @touchstart.prevent="goTouchstart(item.id)" @touchend.prevent="goTouchend(item.id)" >▍{{item.updateTm}}</span>
                             <div style="display: inline;" v-if="item.topics!=''" v-for="(topic,index) in item.topics" :key="index">
                                 <span class="topic" :style="{'background-color':bgColors[index % bgColors.length]}">{{topic}}</span>&nbsp;
                             </div>
