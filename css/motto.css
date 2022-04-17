@@ -15,7 +15,7 @@ input,textarea {
 }
 
 #menuLinks {
-    display: none;
+    display: block;
     background-color: #66bb6a;
     position: absolute;
     top:4rem;
