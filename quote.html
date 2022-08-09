@@ -36,10 +36,13 @@ mark {
 }
 
 .bg-image {
-  background-image: url("./flower.png");
-  background-position: right;
+  background-image: url(./flower.png);
+  background-image: -webkit-cross-fade(url(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==), url(./flower.png), 40%);
+  background-image: cross-fade(url(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==), url(./flower.png), 40%);
+  
+  background-position: right bottom;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
   position: relative;
 }
 </style>
