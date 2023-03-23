@@ -73,9 +73,9 @@
                         </div>
                     </div>
 
-                    <div class="col-12" style="text-indent: 0em;" v-if="item.imgUrl!=''">
+                    <!-- <div class="col-12" style="text-indent: 0em;" v-if="item.imgUrl!=''">
                         <img :src="imgUrl+item.imgUrl+'?x-oss-process=image/resize,m_fixed,h_540,w_960/format,webp'" class="motto_pic" @dblclick="refreshImg">
-                    </div>
+                    </div> -->
                     <div class="col-12">
                         <p class="quote_text font-regular left color-black" >{{ item.content }}</p>
                         <p class="quote_author font-light center color-black" >——{{item.author}}</p>
@@ -84,8 +84,8 @@
                     <div class="row">
                         <div class="col-2"></div>
                         <div class="col-2" @click="copyContent(item.content, item.author)"><img style="width:2.5rem;height:2.5rem;cursor:pointer;" src="/icon/copy.png"></div>
-                        <div class="col-2" v-if="item.imgUrl==''"></div>
-                        <div class="col-2" v-if="item.imgUrl!=''"><a :href="imgUrl+item.imgUrl" download><img style="width:2.5rem;height:2.5rem" src="/icon/cloud-download.png"></a></div>
+                        <!-- <div class="col-2" v-if="item.imgUrl==''"></div>
+                        <div class="col-2" v-if="item.imgUrl!=''"><a :href="imgUrl+item.imgUrl" download><img style="width:2.5rem;height:2.5rem" src="/icon/cloud-download.png"></a></div> -->
                         <div class="col-2" v-if="!isFavor(item.id)" @click="addOneFav(item.id);"><img style="width:2.5rem;height:2.5rem;cursor:pointer;" src="/icon/fav-black.png"></div>
                         <div class="col-2" v-if="isFavor(item.id)" @click="delOneFav(item.id);"><img style="width:2.5rem;height:2.5rem;cursor:pointer;" src="/icon/fav-red.png"></div>
                         <div class="col-2"><img style="width:2.5rem;height:2.5rem;cursor:pointer;" src="/icon/shiyi.png" @click="showExp(item)" v-if="item.explanation!=''"></div>
