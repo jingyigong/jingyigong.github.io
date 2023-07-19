@@ -43,8 +43,8 @@
 
         <div id="menuLinks">
             <a href="index.html">首页</a>
-            <a href="topics.html">话题</a>
-            <a href="authors.html">作者</a>
+            <!-- <a href="topics.html">话题</a>
+            <a href="authors.html">作者</a> -->
             <a href="top.html">最新</a>
             <a href="quote.html">短文</a>  
             <a href="article.html">美文</a>     
@@ -77,7 +77,7 @@
                     <div class="col-12" style="text-indent: 0em;" v-if="item.imgUrl!=''">
                         <!-- <img v-bind:src="item.imgUrl" /> -->
                         <!-- <el-image :src="imgUrl+item.imgUrl" lazy style="border-radius: 1rem;"></el-image> -->
-                        <img :src="imgUrl+item.imgUrl+'?x-oss-process=image/resize,m_fixed,h_540,w_960/format,webp'" class="motto_pic" @dblclick="refreshImg" alt="image of the quote">
+                        <!-- <img :src="imgUrl+item.imgUrl+'?x-oss-process=image/resize,m_fixed,h_540,w_960/format,webp'" class="motto_pic" @dblclick="refreshImg" alt="image of the quote"> -->
                     </div>
                     <div class="col-12">
                         <p class="quote_text font-regular left color-black" >{{ item.content }}</p>
