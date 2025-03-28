@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语句子学习小游戏</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .word {
+            transition: all 0.2s ease;
+            touch-action: none;
+        }
+        .word:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #sentence-canvas.dragging {
+            background-color: #f0f9ff;
+        }
+        .word.dragging {
+            opacity: 0.8;
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        /* 固定画布高度 */
+        #sentence-canvas {
+            min-height: 100px;
+            height: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            gap: 8px 12px;
+        }
+        #word-canvas {
+            min-height: 150px;
+            height: 150px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            gap: 8px 12px;
+            overflow-y: auto;
+        }
+        /* 标点符号特殊样式 */
+        .punctuation {
+            background-color: #f3f4f6 !important;
+            padding: 0.5rem 0.3rem !important;
+        }
+        /* 禁用按钮样式 */
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        /* 玫瑰花样式 */
+        .roses-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            min-height: 30px;
+            flex-wrap: wrap;
+        }
+        .rose {
+            font-size: 24px;
+            color: #e91e63;
+            animation: float 2s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        /* 符号样式 */
+        .symbol-correct {
+            color: #10b981;
+            font-size: 1.25rem;
+            margin-right: 0.5rem;
+        }
+        .symbol-wrong {
+            color: #ef4444;
+            font-size: 1.25rem;
+            margin-right: 0.5rem;
+        }
+        .symbol-audio {
+            color: #3b82f6;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col p-4">
+    <div class="max-w-md mx-auto w-full flex-grow flex flex-col">
+        <!-- 玫瑰花奖励展示区 - 显示答对数量 -->
+        <div id="roses-container" class="roses-container"></div>
+        
+        <h1 class="text-2xl font-bold text-center text-blue-600 mb-4">英语句子学习小游戏</h1>
+        
+        <!-- 统计信息 -->
+        <div class="flex justify-between mb-4 text-sm text-gray-600">
+            <div>总共: <span id="total-count" class="font-bold">0</span></div>
+            <div>答对: <span id="correct-count" class="font-bold">0</span></div>
+            <div>剩余: <span id="remaining-count" class="font-bold">0</span></div>
+        </div>
+        
+        <!-- 结果提示 -->
+        <div id="result-message" class="text-center mb-4 min-h-8 flex items-center justify-center"></div>
+        
+        <!-- 上方画布 - 用户排列的句子 -->
+        <div id="sentence-canvas" class="bg-white rounded-lg p-4 mb-2 flex flex-wrap items-center justify-center gap-2 border-2 border-dashed border-gray-200"></div>
+        
+        <!-- 中文释义 -->
+        <div id="chinese-meaning" class="text-center text-gray-600 mb-2 text-sm italic"></div>
+        
+        <!-- 下方画布 - 单词选项 -->
+        <div id="word-canvas" class="bg-white rounded-lg p-3 mb-2 flex flex-wrap items-center justify-center gap-2 border border-gray-200"></div>
+        
+        <!-- 控制按钮 -->
+        <button id="next-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors mt-2">
+            开始游戏
+        </button>
+    </div>
+
+    <script>
+        // 句子库（英文和对应中文）
+        const originalSentences = [
+            { en: "Welcome back to school, class.", cn: "欢迎回到学校，同学们。" },
+            { en: "What subjects do you like?", cn: "你喜欢什么科目？" },
+            { en: "I like Maths.", cn: "我喜欢数学。" },
+            { en: "It's time for PE.", cn: "该是体育课的时间了。" },
+            { en: "It's time to have a PE lesson.", cn: "该是上体育课的时候了。" },
+            { en: "What lessons do we have this morning?", cn: "我们早上有什么课？" },
+            { en: "We have Maths, Music and Science this morning.", cn: "我们早上有数学，音乐和科学课。" },
+            { en: "I like Music. It's fun.", cn: "我喜欢音乐课。它真有趣。" },
+            { en: "But I don't like that.", cn: "但我不喜欢那个。" },
+            { en: "This is our new timetable.", cn: "这是我们的新课表。" }
+        ];
+        
+        // 游戏状态
+        let gameState = {
+            currentSentence: "",
+            currentChinese: "",
+            shuffledWords: [],
+            correctCount: 0,
+            totalCount: originalSentences.length,
+            remainingCount: originalSentences.length,
+            isPlaying: false,
+            draggedWord: null,
+            draggedWordIndex: -1,
+            isAnswerCorrect: false,
+            sentences: [...originalSentences] // 使用副本以便重置游戏
+        };
+        
+        // DOM 元素
+        const sentenceCanvas = document.getElementById('sentence-canvas');
+        const wordCanvas = document.getElementById('word-canvas');
+        const nextBtn = document.getElementById('next-btn');
+        const resultMessage = document.getElementById('result-message');
+        const totalCountEl = document.getElementById('total-count');
+        const correctCountEl = document.getElementById('correct-count');
+        const remainingCountEl = document.getElementById('remaining-count');
+        const chineseMeaningEl = document.getElementById('chinese-meaning');
+        const rosesContainer = document.getElementById('roses-container');
+        
+        // 颜色数组用于单词背景
+        const colors = [
+            'bg-yellow-100', 'bg-blue-100', 'bg-green-100', 
+            'bg-pink-100', 'bg-purple-100', 'bg-indigo-100',
+            'bg-red-100', 'bg-teal-100', 'bg-orange-100'
+        ];
+        
+        // 初始化游戏
+        function initGame() {
+            // 重置句子库
+            gameState.sentences = [...originalSentences];
+            
+            gameState.isPlaying = true;
+            gameState.correctCount = 0;
+            gameState.totalCount = originalSentences.length;
+            gameState.remainingCount = originalSentences.length;
+            
+            updateCounters();
+            updateRoses();
+            nextBtn.textContent = "下一个";
+            loadNextSentence();
+        }
+        
+        // 更新计数器显示
+        function updateCounters() {
+            totalCountEl.textContent = gameState.totalCount;
+            correctCountEl.textContent = gameState.correctCount;
+            remainingCountEl.textContent = gameState.remainingCount;
+        }
+        
+        // 更新玫瑰花显示 - 现在直接反映答对数量
+        function updateRoses() {
+            rosesContainer.innerHTML = '';
+            for (let i = 0; i < gameState.correctCount; i++) {
+                const rose = document.createElement('div');
+                rose.className = 'rose';
+                rose.textContent = '🌹';
+                rosesContainer.appendChild(rose);
+            }
+        }
+        
+        // 加载下一个句子
+        function loadNextSentence() {
+            // 检查是否还有句子
+            if (gameState.sentences.length === 0) {
+                endGame();
+                return;
+            }
+            
+            // 清除画布
+            sentenceCanvas.innerHTML = '';
+            wordCanvas.innerHTML = '';
+            resultMessage.innerHTML = '';
+            
+            // 重置状态
+            nextBtn.classList.add('btn-disabled');
+            nextBtn.disabled = true;
+            gameState.isAnswerCorrect = false;
+            
+            // 随机选择一个句子
+            const randomIndex = Math.floor(Math.random() * gameState.sentences.length);
+            gameState.currentSentence = gameState.sentences[randomIndex].en;
+            gameState.currentChinese = gameState.sentences[randomIndex].cn;
+            gameState.sentences.splice(randomIndex, 1);
+            
+            // 更新剩余题数
+            gameState.remainingCount = gameState.sentences.length;
+            updateCounters();
+            
+            // 显示中文释义
+            chineseMeaningEl.textContent = gameState.currentChinese;
+            
+            // 分割句子为单词和标点符号
+            const tokens = tokenizeSentence(gameState.currentSentence);
+            gameState.shuffledWords = shuffleArray([...tokens]);
+            
+            // 在下画布显示打乱的单词和标点
+            gameState.shuffledWords.forEach((token, index) => {
+                const wordEl = createWordElement(token, false);
+                wordCanvas.appendChild(wordEl);
+            });
+        }
+        
+        // 分词函数 - 处理单词和标点符号
+        function tokenizeSentence(sentence) {
+            const tokens = [];
+            let currentToken = '';
+            
+            for (let i = 0; i < sentence.length; i++) {
+                const char = sentence[i];
+                
+                // 处理撇号和连字符（作为单词的一部分）
+                if (char === "'" || char === "-") {
+                    currentToken += char;
+                    continue;
+                }
+                
+                // 如果是其他标点符号或空格
+                if (/[.,?! ]/.test(char)) {
+                    if (currentToken) {
+                        tokens.push(currentToken);
+                        currentToken = '';
+                    }
+                    if (char !== ' ') {
+                        tokens.push(char);
+                    }
+                } else {
+                    currentToken += char;
+                }
+            }
+            
+            // 添加最后一个token
+            if (currentToken) {
+                tokens.push(currentToken);
+            }
+            
+            return tokens;
+        }
+        
+        // 创建单词/标点元素
+        function createWordElement(token, isInSentenceCanvas) {
+            const isPunctuation = /[.,?!]/.test(token);
+            const randomColor = isPunctuation ? 'bg-gray-100' : colors[Math.floor(Math.random() * colors.length)];
+            
+            const wordEl = document.createElement('div');
+            wordEl.className = `word ${randomColor} px-3 py-2 rounded-lg cursor-pointer select-none ${isPunctuation ? 'punctuation' : ''}`;
+            wordEl.textContent = token;
+            wordEl.dataset.token = token;
+            wordEl.dataset.isPunctuation = isPunctuation;
+            
+            if (isInSentenceCanvas) {
+                setupDragEvents(wordEl);
+            }
+            
+            wordEl.addEventListener('click', (e) => {
+                // 防止拖拽后触发点击事件
+                if (gameState.draggedWord !== null) {
+                    gameState.draggedWord = null;
+                    return;
+                }
+                
+                if (isInSentenceCanvas) {
+                    // 从句子画布移回单词画布
+                    wordCanvas.appendChild(wordEl);
+                    wordEl.removeEventListener('dragstart', handleDragStart);
+                    wordEl.removeEventListener('dragover', handleDragOver);
+                    wordEl.removeEventListener('drop', handleDrop);
+                    wordEl.addEventListener('click', () => handleWordClick(wordEl, false));
+                } else {
+                    // 从单词画布移到句子画布
+                    sentenceCanvas.appendChild(wordEl);
+                    setupDragEvents(wordEl);
+                    wordEl.addEventListener('click', () => handleWordClick(wordEl, true));
+                }
+                
+                // 仅在下方画布清空时才检查答案
+                if (wordCanvas.children.length === 0) {
+                    checkAnswer();
+                }
+            });
+            
+            return wordEl;
+        }
+        
+        // 设置拖拽事件
+        function setupDragEvents(wordEl) {
+            wordEl.draggable = true;
+            wordEl.addEventListener('dragstart', handleDragStart);
+            wordEl.addEventListener('dragover', handleDragOver);
+            wordEl.addEventListener('drop', handleDrop);
+            wordEl.addEventListener('dragend', handleDragEnd);
+        }
+        
+        // 拖拽开始
+        function handleDragStart(e) {
+            gameState.draggedWord = this;
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', this.dataset.token);
+            e.dataTransfer.effectAllowed = 'move';
+            
+            // 记录原始位置
+            gameState.draggedWordIndex = Array.from(sentenceCanvas.children).indexOf(this);
+        }
+        
+        // 拖拽经过
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            
+            const draggingWord = gameState.draggedWord;
+            const thisIndex = Array.from(sentenceCanvas.children).indexOf(this);
+            
+            // 如果不是同一个单词且位置不同
+            if (draggingWord !== this) {
+                sentenceCanvas.insertBefore(draggingWord, 
+                    thisIndex > gameState.draggedWordIndex ? this.nextSibling : this);
+            }
+        }
+        
+        // 拖拽放下
+        function handleDrop(e) {
+            e.preventDefault();
+            // 仅在下方画布清空时才检查答案
+            if (wordCanvas.children.length === 0) {
+                checkAnswer();
+            }
+        }
+        
+        // 拖拽结束
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+            gameState.draggedWord = null;
+        }
+        
+        // 检查答案（仅在下方画布清空时调用）
+        function checkAnswer() {
+            const userTokens = Array.from(sentenceCanvas.children).map(el => el.textContent);
+            const correctTokens = tokenizeSentence(gameState.currentSentence);
+            
+            // 检查顺序是否正确
+            const isOrderCorrect = JSON.stringify(userTokens) === JSON.stringify(correctTokens);
+            
+            if (isOrderCorrect) {
+                showResult(true);
+                gameState.isAnswerCorrect = true;
+                gameState.correctCount++;
+                gameState.remainingCount = gameState.sentences.length;
+                updateCounters();
+                updateRoses(); // 答对后立即更新玫瑰花数量
+                nextBtn.classList.remove('btn-disabled');
+                nextBtn.disabled = false;
+                
+                // 通关判定
+                if (gameState.remainingCount === 0) {
+                    setTimeout(endGame, 1000);
+                }
+            } else {
+                showResult(false);
+                gameState.isAnswerCorrect = false;
+                nextBtn.classList.add('btn-disabled');
+                nextBtn.disabled = true;
+            }
+        }
+        
+        // 显示结果
+        function showResult(isCorrect) {
+            if (isCorrect) {
+                resultMessage.innerHTML = `
+                    <div class="flex items-center justify-center text-green-600">
+                        <span class="symbol-correct">✓</span>
+                        <span>正确!</span>
+                        <button id="speaker-btn" class="ml-2 focus:outline-none">
+                            <span class="symbol-audio">🔊</span>
+                        </button>
+                    </div>
+                `;
+                
+                // 添加音频播放功能
+                document.getElementById('speaker-btn').addEventListener('click', () => {
+                    speakSentence(gameState.currentSentence);
+                });
+            } else {
+                resultMessage.innerHTML = `
+                    <div class="flex items-center justify-center text-red-600">
+                        <span class="symbol-wrong">✘</span>
+                        <span>不正确，请继续尝试</span>
+                    </div>
+                `;
+            }
+        }
+        
+        // 游戏结束
+        function endGame() {
+            gameState.isPlaying = false;
+            sentenceCanvas.innerHTML = '';
+            wordCanvas.innerHTML = '';
+            chineseMeaningEl.textContent = '';
+            resultMessage.innerHTML = `
+                <div class="text-center">
+                    <div class="text-2xl font-bold mb-4 text-green-600">
+                        <span class="symbol-correct">✓</span>
+                        <div class="mt-2">恭喜您，全部通关！</div>
+                    </div>
+                    <div class="mb-2">总共 <span class="font-bold">${gameState.totalCount}</span> 句</div>
+                    <div class="mb-6 text-lg">答对了 <span class="font-bold text-blue-600">${gameState.correctCount}</span> 句</div>
+                    <button onclick="window.location.reload()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors text-lg">
+                        再玩一次
+                    </button>
+                </div>
+            `;
+            nextBtn.style.display = 'none';
+        }
+        
+        // 语音合成
+        function speakSentence(sentence) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(sentence);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的浏览器不支持语音合成功能');
+            }
+        }
+        
+        // 辅助函数：打乱数组
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        // 初始化计数器
+        function initCounters() {
+            gameState.totalCount = originalSentences.length;
+            gameState.remainingCount = originalSentences.length;
+            updateCounters();
+        }
+        
+        // 事件监听
+        nextBtn.addEventListener('click', () => {
+            if (!gameState.isPlaying) {
+                initGame();
+            } else if (gameState.isAnswerCorrect) {
+                loadNextSentence();
+            }
+        });
+        
+        // 页面加载时初始化
+        initCounters();
+        updateRoses();
+    </script>
+</body>
+</html>
