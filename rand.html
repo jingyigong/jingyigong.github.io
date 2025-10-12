@@ -75,6 +75,11 @@
     .scrollable-content::-webkit-scrollbar-thumb:hover {
       background: rgba(245, 158, 11, 0.7);
     }
+    
+        /* 统一段落间距 */
+    .quote-text p {
+      line-height: 1.625; /* 段落内部行间距，与段落间距保持一致 */
+    }
   </style>
 </head>
 <body class="gradient-bg min-h-screen flex flex-col">
@@ -95,7 +100,7 @@
         <!-- 可滚动的内容区域 -->
         <div class="scrollable-content flex-1">
           <!-- 格言正文 -->
-          <div id="quote-text" class="quote-text quote-serif text-lg leading-relaxed text-amber-900 cursor-pointer fade-in text-center">
+          <div id="quote-text" class="quote-text quote-serif text-lg leading-none text-amber-900 cursor-pointer fade-in text-center">
             <p class="text-amber-600 italic">加载中...</p>
           </div>
 
@@ -163,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // 渲染正文（处理换行符 \n）
       quoteTextEl.innerHTML = randomQuote.text
         .split('\n')
-        .map(line => `<p class="mb-4">${line}</p>`)
+        .map(line => `<p>${line}</p>`)
         .join('');
 
       // 渲染作者
