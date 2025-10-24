@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>高德地图定位 Demo（反向地理编码 + 拖拽）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!--
+    注意：请把 YOUR_AMAP_KEY 替换为你的高德 Web API Key。
+    我们在 URL 中通过 plugin 参数一次性加载 Geocoder 与 Geolocation 插件，避免后续找不到插件导致定位不生效。
+  -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=b71feeaf4fdbd031d554ad3ef3d8c803&plugin=AMap.Geocoder,AMap.Geolocation"></script>
+
+  <style>
+    body { background: #f0f9f4; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Microsoft Yahei", sans-serif; }
+    #map { width:100%; height: 62vh; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(15,23,42,0.08); }
+    .small-muted { color: #6b7280; font-size: 0.9rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4">
+
+  <h1 class="text-2xl font-semibold text-emerald-700 mb-3">📍 高德地图 Demo（苏州默认）</h1>
+
+  <div class="w-full max-w-xl space-y-3">
+    <!-- 地址输入 -->
+    <div class="flex gap-2">
+      <input id="addressInput" placeholder="输入地址并按回车或点击【定位】" class="flex-1 px-4 py-2 rounded-xl border border-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-200" />
+      <button id="btnLocate" class="px-4 py-2 rounded-xl bg-emerald-600 text-white shadow">定位</button>
+      <button id="btnUseBrowser" class="px-3 py-2 rounded-xl bg-white border text-emerald-600">使用浏览器定位</button>
+    </div>
+
+    <!-- 坐标与地址显示 -->
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="flex items-center justify-between mb-2">
+        <div class="small-muted">当前坐标（经, 纬）</div>
+        <div class="small-muted">操作提示：点击地图，或拖动标记以精确定位</div>
+      </div>
+      <div class="flex gap-4 items-center">
+        <div class="flex-1">
+          <div class="text-sm text-slate-700">经度 (lng)</div>
+          <div id="lng" class="text-lg font-mono text-emerald-700">--</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm text-slate-700">纬度 (lat)</div>
+          <div id="lat" class="text-lg font-mono text-emerald-700">--</div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="text-sm text-slate-700">地址 (反向解析)</div>
+        <div id="addressDisplay" class="text-sm text-slate-600 mt-1">--</div>
+      </div>
+    </div>
+
+    <!-- 地图 -->
+    <div id="map" class="rounded-xl"></div>
+
+    <!-- 小按钮 -->
+    <div class="flex gap-2">
+      <button id="btnClearMarker" class="flex-1 px-4 py-2 rounded-xl bg-white border text-emerald-600">清除标记</button>
+      <button id="btnCenterSuzhou" class="flex-1 px-4 py-2 rounded-xl bg-white border text-emerald-600">定位到苏州</button>
+    </div>
+  </div>
+
+  <script>
+    let map, marker = null, geocoder = null, geolocationPlugin = null;
+
+    // 初始中心：苏州（lng, lat）
+    const DEFAULT_CENTER = [120.619585, 31.299379];
+
+    function fmt(n) { return (typeof n === 'number') ? n.toFixed(6) : '--'; }
+
+    function updateCoordsUI(lng, lat) {
+      document.getElementById('lng').textContent = fmt(lng);
+      document.getElementById('lat').textContent = fmt(lat);
+    }
+
+    function updateAddressUI(addr) {
+      document.getElementById('addressDisplay').textContent = addr || '--';
+    }
+
+    function createOrMoveMarker(lng, lat) {
+      if (!marker) {
+        marker = new AMap.Marker({
+          position: [lng, lat],
+          draggable: true,
+          title: '选中位置（拖动可微调）',
+          map: map
+        });
+
+        // 拖拽结束更新坐标并进行反向地理编码
+        marker.on('dragend', (ev) => {
+          const p = ev.lnglat;
+          updateCoordsUI(p.getLng(), p.getLat());
+          reverseGeocode(p.getLng(), p.getLat());
+        });
+      } else {
+        marker.setPosition([lng, lat]);
+      }
+      // 中心化
+      map.setCenter([lng, lat]);
+    }
+
+    // 反向地理编码（坐标 -> 地址）
+    function reverseGeocode(lng, lat) {
+      if (!geocoder) {
+        console.warn('Geocoder 未初始化');
+        return;
+      }
+      // geocoder.getAddress 可接受对象或坐标数组
+      geocoder.getAddress([lng, lat], function(status, result) {
+        if (status === 'complete' && result.regeocode) {
+          const addr = result.regeocode.formattedAddress || (result.regeocode.addressComponent || {});
+          updateAddressUI(result.regeocode.formattedAddress || JSON.stringify(addr));
+        } else {
+          updateAddressUI('未能解析地址');
+        }
+      });
+    }
+
+    // 地址正向地理编码（地址 -> 坐标）
+    function geocodeAddress(text) {
+      if (!geocoder) {
+        alert('Geocoder 未初始化，请稍后重试');
+        return;
+      }
+      geocoder.getLocation(text, function(status, result) {
+        if (status === 'complete' && result.geocodes && result.geocodes.length > 0) {
+          const loc = result.geocodes[0].location;
+          const lng = loc.lng, lat = loc.lat;
+          createOrMoveMarker(lng, lat);
+          updateCoordsUI(lng, lat);
+          updateAddressUI(result.geocodes[0].formattedAddress || text);
+          map.setZoom(15);
+        } else {
+          alert('未找到该地址，请尝试更详细的描述（如街道+门牌号）');
+        }
+      });
+    }
+
+    // 尝试使用高德定位插件；若失败，回退到浏览器定位
+    function tryLocateByPluginOrBrowser() {
+      if (geolocationPlugin) {
+        geolocationPlugin.getCurrentPosition(function(status, result) {
+          if (status === 'complete' && result && result.position) {
+            const lng = result.position.lng, lat = result.position.lat;
+            createOrMoveMarker(lng, lat);
+            updateCoordsUI(lng, lat);
+            reverseGeocode(lng, lat);
+            return;
+          }
+          // 如果插件定位失败，回退浏览器定位
+          browserGeolocationFallback();
+        }, (err) => {
+          console.warn('高德插件定位失败：', err);
+          browserGeolocationFallback();
+        });
+      } else {
+        browserGeolocationFallback();
+      }
+    }
+
+    function browserGeolocationFallback() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const lat = pos.coords.latitude, lng = pos.coords.longitude;
+          createOrMoveMarker(lng, lat);
+          updateCoordsUI(lng, lat);
+          reverseGeocode(lng, lat);
+        }, (err) => {
+          console.warn('浏览器定位失败：', err);
+          alert('无法获取位置（请允许定位或检查浏览器权限），将显示苏州默认位置');
+          // fallback center
+          map.setCenter(DEFAULT_CENTER);
+        }, { enableHighAccuracy: true, timeout: 8000 });
+      } else {
+        alert('浏览器不支持定位，将显示苏州默认位置');
+        map.setCenter(DEFAULT_CENTER);
+      }
+    }
+
+        // 初始化地图与插件
+    function initMap() {
+      map = new AMap.Map('map', {
+        center: DEFAULT_CENTER,
+        zoom: 13,
+      });
+
+      // 初始化 Geocoder（插件已通过 URL 加载）
+      try {
+        geocoder = new AMap.Geocoder({ 
+          city: '010',  // 设置城市，010代表全国范围
+          radius: 1000
+        });
+        console.log('Geocoder 初始化成功');
+      } catch (e) {
+        console.error('Geocoder 初始化失败:', e);
+      }
+
+      // 初始化 Geolocation 插件
+      try {
+        geolocationPlugin = new AMap.Geolocation({
+          enableHighAccuracy: true,
+          timeout: 10000,
+          buttonPosition: 'RB',
+          zoomToAccuracy: true
+        });
+        map.addControl(geolocationPlugin);
+        console.log('Geolocation 初始化成功');
+      } catch (e) {
+        console.error('Geolocation 初始化失败:', e);
+      }
+
+      // 如果用户点击地图，创建/移动标记并反向解析地址
+      map.on('click', function(e) {
+        const lng = e.lnglat.getLng(), lat = e.lnglat.getLat();
+        createOrMoveMarker(lng, lat);
+        updateCoordsUI(lng, lat);
+        reverseGeocode(lng, lat);
+      });
+
+      // 等待地图完全加载后再尝试定位
+      map.on('complete', function() {
+        console.log('地图加载完成');
+        // 延迟执行定位，确保所有插件就绪
+        setTimeout(() => {
+          tryLocateByPluginOrBrowser();
+        }, 500);
+      });
+    }
+
+    // 事件绑定
+    window.addEventListener('load', () => {
+      initMap();
+
+      // 地址输入回车和按钮
+      const addrInput = document.getElementById('addressInput');
+      const btnLocate = document.getElementById('btnLocate');
+      addrInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const txt = addrInput.value.trim();
+          if (txt) geocodeAddress(txt);
+        }
+      });
+      btnLocate.addEventListener('click', () => {
+        const txt = addrInput.value.trim();
+        if (!txt) { alert('请输入地址关键词'); return; }
+        geocodeAddress(txt);
+      });
+
+      // 使用浏览器定位按钮（手动触发回退定位）
+      document.getElementById('btnUseBrowser').addEventListener('click', () => {
+        browserGeolocationFallback();
+      });
+
+      // 清除标记
+      document.getElementById('btnClearMarker').addEventListener('click', () => {
+        if (marker) { marker.setMap(null); marker = null; }
+        updateCoordsUI(null, null); updateAddressUI(null);
+      });
+
+      // 回到苏州中心
+      document.getElementById('btnCenterSuzhou').addEventListener('click', () => {
+        map.setCenter(DEFAULT_CENTER); map.setZoom(12);
+      });
+    });
+  </script>
+</body>
+</html>
