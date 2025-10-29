@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>强制横屏显示演示（锁屏优先，变换回退）</title>
+<style>
+  :root, html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background: #0f172a;
+    color: #e6eef8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: system-ui, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans", "Noto Sans CJK SC", sans-serif;
+  }
+
+  /* 全屏容器（不旋转）*/
+  #shell {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* 真实要展示为“横屏”的应用内容 */
+  #app {
+    /* 我们会通过 JS 设置宽高并在需要时旋转 */
+    background: linear-gradient(135deg,#2563eb22,#0ea5e922);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    box-sizing: border-box;
+    touch-action: auto; /* 保持默认手势 */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  h1 { margin: 0; font-size: 1.4rem; text-align:center; color:#061A40; }
+  p { margin: 0; color: #083165; text-align:center; font-size: 0.95rem; }
+
+  /* 控制面板 */
+  .controls {
+    position: fixed;
+    left: 12px;
+    top: 12px;
+    display:flex;
+    gap:8px;
+  }
+  button {
+    background: #0ea5e9;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(14,165,233,0.12);
+  }
+  .info {
+    position: fixed;
+    right: 12px;
+    top: 12px;
+    background: rgba(255,255,255,0.06);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+
+  /* 当我们使用“旋转回退”时，给 app 添加一个 class */
+  .rotated {
+    position: absolute;
+    transform-origin: left top;
+    /* 注意：transform 在 JS 里会设置具体 transform 值（rotate + translate + scale）*/
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* 小屏样式展示用（仅演示用） */
+  .demo-box {
+    width: 90%;
+    max-width: 720px;
+    height: 60%;
+    min-height: 300px;
+    background: rgba(255,255,255,0.85);
+    color: #04203b;
+    border-radius: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+  }
+
+  /* 说明文本在小屏上的可读调整 */
+  @media (max-width:420px) {
+    h1 { font-size:1.1rem; }
+    p { font-size:0.85rem; }
+  }
+</style>
+</head>
+<body>
+  <div id="shell">
+    <div id="app" role="application" aria-label="横屏模拟应用">
+      <h1>横屏显示演示</h1>
+      <p>如果浏览器允许，将尝试锁定设备横屏；若不允许，会使用 CSS 旋转回退。</p>
+      <div class="demo-box">这里是你的「横屏」内容区域</div>
+      <p style="opacity:.8">尝试横向滚动、按钮、或缩放测试交互（部分浏览器限制手势）</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="tryLockBtn">尝试锁定横屏（需要用户手势）</button>
+    <button id="forceRotateBtn">强制旋转（回退方案）</button>
+    <button id="resetBtn">恢复默认</button>
+  </div>
+
+  <div class="info" id="status">状态：等待操作</div>
+
+<script>
+(function() {
+  const app = document.getElementById('app');
+  const status = document.getElementById('status');
+  const tryLockBtn = document.getElementById('tryLockBtn');
+  const forceRotateBtn = document.getElementById('forceRotateBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  let usingLock = false;
+  let usingRotateFallback = false;
+
+  function updateStatus(msg) { status.textContent = '状态：' + msg; }
+
+  // 设置 app 的宽高（用于旋转回退时把宽高互换）
+  function setAppSizeForRotate() {
+    // 目标：把内容宽（横向）设为视口高度，内容高（纵向）设为视口宽度
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    // Set explicit pixel sizes so transform math is stable
+    app.style.width = vh + 'px';
+    app.style.height = vw + 'px';
+    app.style.left = '0px';
+    app.style.top = '0px';
+  }
+
+  // 计算 transform：rotate(90deg) 后需要 translate(0, -100%)（基于 transform-origin: left top）
+  function applyRotateTransform() {
+    // rotate 90deg then translate up by 100% of the rotated element's height
+    // 使用 translateY(-100%) 会基于自身高度起作用，但为了避免浏览器兼容差异我们用绝对像素
+    const vh = window.innerHeight;
+    // After we set width = vh and height = vw,  translateY(-100%) works; we can use percentage safe
+    app.style.transform = 'rotate(90deg) translate(0, -100%)';
+  }
+
+  function enableRotateFallback() {
+    usingRotateFallback = true;
+    usingLock = false;
+    app.classList.add('rotated');
+    setAppSizeForRotate();
+    applyRotateTransform();
+    // 禁用 body 滚动以避免冲突
+    document.body.style.overflow = 'hidden';
+    updateStatus('使用回退：CSS 旋转（视觉横屏）');
+  }
+
+  function resetToDefault() {
+    usingRotateFallback = false;
+    usingLock = false;
+    app.classList.remove('rotated');
+    app.style.width = '';
+    app.style.height = '';
+    app.style.left = '';
+    app.style.top = '';
+    app.style.transform = '';
+    document.body.style.overflow = '';
+    // 若先前通过 Screen Orientation API 锁定过，尝试解锁（若可用）
+    if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch(e) { /* ignore */ }
+    }
+    updateStatus('恢复默认（纵向）');
+  }
+
+  // 尝试使用 Screen Orientation API 锁定横屏（必须由用户手势触发）
+  async function tryLockLandscape() {
+    if (!('orientation' in screen)) {
+      updateStatus('当前浏览器不支持 Screen Orientation API，自动回退到 CSS 旋转。');
+      enableRotateFallback();
+      return;
+    }
+    try {
+      // 有些浏览器需要 'landscape-primary'，先试 'landscape'
+      await screen.orientation.lock('landscape');
+      usingLock = true;
+      usingRotateFallback = false;
+      updateStatus('已通过 Screen Orientation API 锁定为横屏（若浏览器支持）');
+      // 在锁定后确保 app 占满视口（无需旋转）
+      app.style.width = '100vw';
+      app.style.height = '100vh';
+      app.style.transform = '';
+      app.classList.remove('rotated');
+      document.body.style.overflow = '';
+    } catch (err) {
+      console.warn('锁屏失败：', err);
+      updateStatus('锁屏失败，使用 CSS 回退策略。');
+      enableRotateFallback();
+    }
+  }
+
+  // 绑定按钮
+  tryLockBtn.addEventListener('click', tryLockLandscape);
+  forceRotateBtn.addEventListener('click', () => {
+    enableRotateFallback();
+  });
+  resetBtn.addEventListener('click', resetToDefault);
+
+  // 在窗口变化时更新尺寸（对旋转回退很重要）
+  window.addEventListener('resize', () => {
+    if (usingRotateFallback) {
+      // 小延迟，等待浏览器稳定内核尺寸（有时 onresize 连续触发）
+      setTimeout(() => {
+        setAppSizeForRotate();
+        applyRotateTransform();
+      }, 50);
+    }
+  });
+
+  // 初始化：如果屏幕本来就是横向就不用任何处理
+  function detectInitial() {
+    const isLandscape = window.innerWidth > window.innerHeight;
+    if (isLandscape) {
+      updateStatus('设备当前已横屏 — 无需强制。');
+      app.style.width = '100vw';
+      app.style.height = '100vh';
+    } else {
+      updateStatus('当前为纵向。可点击「尝试锁定横屏」或「强制旋转（回退）」');
+      app.style.width = '90vw';
+      app.style.maxWidth = '720px';
+      app.style.height = '60vh';
+    }
+  }
+  detectInitial();
+
+})();
+</script>
+</body>
+</html>
