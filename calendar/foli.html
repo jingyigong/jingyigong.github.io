@@ -216,6 +216,7 @@
             width: 100%;
             min-width: 600px; /* 设置最小宽度，小屏可滚动 */
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         .calendar-table thead {
@@ -240,7 +241,7 @@
             padding: 6px 2px; /* 缩小移动端单元格内边距 */
             text-align: center;
             border: 1px solid #f0f0f0;
-            min-height: 70px; /* 缩小移动端单元格高度 */
+            height: 70px; /* 缩小移动端单元格高度 */
             vertical-align: top;
             cursor: pointer;
             transition: all 0.3s;
@@ -251,7 +252,7 @@
         @media (min-width: 768px) {
             .calendar-table td {
                 padding: 10px;
-                min-height: 100px;
+                height: 100px;
                 font-size: 14px;
             }
         }
@@ -266,30 +267,40 @@
             color: #ff4757;
         }
 
+        .date-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+
         .solar-day {
             font-size: 16px; /* 缩小移动端数字 */
             font-weight: bold;
-            margin-bottom: 3px;
         }
 
         @media (min-width: 768px) {
             .solar-day {
                 font-size: 24px;
-                margin-bottom: 5px;
             }
         }
 
         .lunar-day {
             font-size: 10px; /* 缩小移动端农历 */
             color: #666;
-            margin-bottom: 2px;
         }
 
         @media (min-width: 768px) {
             .lunar-day {
                 font-size: 12px;
-                margin-bottom: 3px;
             }
+        }
+
+        .festivals-container {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .festival {
@@ -297,10 +308,7 @@
             padding: 1px 3px;
             border-radius: 3px;
             margin-top: 1px;
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            word-wrap: break-word;
         }
 
         @media (min-width: 768px) {
@@ -502,13 +510,13 @@
                 <table class="calendar-table">
                     <thead>
                         <tr>
-                            <th class="sunday">日</th>
-                            <th>一</th>
-                            <th>二</th>
-                            <th>三</th>
-                            <th>四</th>
-                            <th>五</th>
-                            <th class="saturday">六</th>
+                            <th class="sunday">星期日</th>
+                            <th>星期一</th>
+                            <th>星期二</th>
+                            <th>星期三</th>
+                            <th>星期四</th>
+                            <th>星期五</th>
+                            <th class="saturday">星期六</th>
                         </tr>
                     </thead>
                     <tbody id="calendarBody"></tbody>
@@ -523,6 +531,8 @@
                 <li><strong>六斋日：</strong>若逢大月，为农历每月初八、十四、十五、廿三、廿九、三十日；若逢小月，为农历每月初八、十四、十五、廿三、廿八、廿九日</li>
                 <li><strong>朔望斋：</strong>农历每月初一、十五日</li>
                 <li><strong>月斋：</strong>农历每年正月、五月、九月等三个月</li>
+                <li><strong>丙丁日</strong>是指天干为丙（丙子、丙寅、丙辰、丙午、丙申、丙戌）或丁（丁丑、丁卯、丁巳、丁未、丁酉、丁亥）的日子，在五行中属火。宜静不宜动，宜养不宜泄，犯者皆得病。</li>                
+                <li><strong>上弦日</strong>（初七、初八） 和 <strong>下弦日</strong>（廿二、廿三） 是月相周期中气场不稳定、阴阳力量转换的关键日期，此时应戒欲静养，犯者减寿一年。</li>
             </ul>
         </div>
 
@@ -1035,6 +1045,9 @@
                             cell.classList.add(j === 0 ? 'sunday' : 'saturday');
                         }
 
+                        var dateRow = document.createElement('div');
+                        dateRow.className = 'date-row';
+
                         var solarDayDiv = document.createElement('div');
                         solarDayDiv.className = 'solar-day';
                         solarDayDiv.textContent = day;
@@ -1047,52 +1060,55 @@
                             lunarDayDiv.textContent = cDay(lunarDate.day);
                         }
 
-                        cell.appendChild(solarDayDiv);
-                        cell.appendChild(lunarDayDiv);
+                        dateRow.appendChild(solarDayDiv);
+                        dateRow.appendChild(lunarDayDiv);
+                        cell.appendChild(dateRow);
+
+                        var festivalsContainer = document.createElement('div');
+                        festivalsContainer.className = 'festivals-container';
 
                         var solarKey = String(month + 1).padStart(2, '0') + String(day).padStart(2, '0');
                         if(sFtv[solarKey]) {
                             var festival = document.createElement('div');
                             festival.className = 'festival solar-festival';
                             festival.textContent = sFtv[solarKey];
-                            cell.appendChild(festival);
+                            festivalsContainer.appendChild(festival);
+                        }
+
+                        // 丙丁日判断
+                        var ganIndex = lunarDate.dayCyl % 10;
+                        if(ganIndex === 2 || ganIndex === 3) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※丙丁日，犯者皆得病';
+                            festivalsContainer.appendChild(festival);
+                        }
+
+                        // 上弦日和下弦日
+                        if(lunarDate.day === 7 || lunarDate.day === 8) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※上弦日，犯者减寿一年';
+                            festivalsContainer.appendChild(festival);
+                        }
+                        if(lunarDate.day === 22 || lunarDate.day === 23) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※下弦日，犯者减寿一年';
+                            festivalsContainer.appendChild(festival);
                         }
 
                         var lunarKey = String(lunarDate.month).padStart(2, '0') + String(lunarDate.day).padStart(2, '0');
                         if(lFtv[lunarKey]) {
-                            // 只显示主要节日，不显示完整描述
-                            var festivalText = lFtv[lunarKey];
-                            var mainFestival = truncateString(festivalText);
-                            
-                            // 提取主要节日名称
-                            /*
-                            if(festivalText.includes('菩萨圣诞') || festivalText.includes('佛圣诞') || 
-                               festivalText.includes('祖师圣诞') || festivalText.includes('如来圣诞')) {
-                                var matches = festivalText.match(/[^，。]+?(?:菩萨|佛|祖师|如来)(?:圣诞|成道|出家|涅槃)/);
-                                if(matches) mainFestival = matches[0];
-                            } else if(festivalText.includes('春节') || festivalText.includes('元宵') || 
-                                     festivalText.includes('端午') || festivalText.includes('中秋') ||
-                                     festivalText.includes('重阳') || festivalText.includes('小年') ||
-                                     festivalText.includes('除夕') || festivalText.includes('腊八')) {
-                                var matches = festivalText.match(/春节|元宵节|端午节|中秋节|重阳节|小年|除夕|腊八节/);
-                                if(matches) mainFestival = matches[0];
-                            } else if(festivalText.includes('十斋日')) {
-                                mainFestival = '十斋日';
-                            } else if(festivalText.includes('佛欢喜日')) {
-                                mainFestival = '佛欢喜日';
+                            var festival = document.createElement('div');
+                            var festivalText = "※" + lFtv[lunarKey];
+                            if(festivalText.includes('十斋日')) {
+                                festival.className = 'festival ten-fast-day';
+                            } else {
+                                festival.className = 'festival lunar-festival';
                             }
-                            */
-                            
-                            if(mainFestival) {
-                                var festival = document.createElement('div');
-                                if(mainFestival === '十斋日') {
-                                    festival.className = 'festival ten-fast-day';
-                                } else {
-                                    festival.className = 'festival lunar-festival';
-                                }
-                                festival.textContent = mainFestival;
-                                cell.appendChild(festival);
-                            }
+                            festival.textContent = festivalText;
+                            festivalsContainer.appendChild(festival);
                         }
 
                         var term1 = sTerm(year, month * 2);
@@ -1101,8 +1117,10 @@
                             var termDiv = document.createElement('div');
                             termDiv.className = 'festival solar-term';
                             termDiv.textContent = day === term1 ? solarTerm[month * 2] : solarTerm[month * 2 + 1];
-                            cell.appendChild(termDiv);
+                            festivalsContainer.appendChild(termDiv);
                         }
+
+                        cell.appendChild(festivalsContainer);
 
                         cell.dataset.year = year;
                         cell.dataset.month = month + 1;
