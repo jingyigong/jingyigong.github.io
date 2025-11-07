@@ -568,8 +568,24 @@
                 <li><strong>六斋日：</strong>若逢大月，为农历每月初八、十四、十五、廿三、廿九、三十日；若逢小月，为农历每月初八、十四、十五、廿三、廿八、廿九日</li>
                 <li><strong>朔望斋：</strong>农历每月初一、十五日</li>
                 <li><strong>月斋：</strong>农历每年正月、五月、九月等三个月</li>
-                <li><strong>丙丁日</strong>是指天干为丙（丙子、丙寅、丙辰、丙午、丙申、丙戌）或丁（丁丑、丁卯、丁巳、丁未、丁酉、丁亥）的日子，在五行中属火。宜静不宜动，宜养不宜泄，犯者皆得病。</li>                
-                <li><strong>上弦日</strong>（初七、初八） 和 <strong>下弦日</strong>（廿二、廿三） 是月相周期中气场不稳定、阴阳力量转换的关键日期，此时应戒欲静养，犯者减寿一年。</li>
+                <li><strong>春分：</strong>雷将发生。犯者生子五官四肢不全，父母有灾。宜从惊蛰节禁起，戒过一月。</li>
+                <li><strong>秋分：</strong>杀气浸盛，阳气日衰。宜从白露节禁起，戒过一月。</li>
+                <li><strong>夏至：</strong>阴阳相争，死生分判之时。宜从芒种节禁起，戒过一月。</li>
+                <li><strong>冬至：</strong>阴阳相争，死生分判之时。宜从大雪节禁起，戒过一月。</li>                
+                <li><strong>春分、秋分、夏至、冬至：</strong>此四节之前三后三共七日，犯之必得危疾，尤宜切戒。</li>
+                
+                <li><strong>丙丁日：</strong>是指天干为丙（丙子、丙寅、丙辰、丙午、丙申、丙戌）或丁（丁丑、丁卯、丁巳、丁未、丁酉、丁亥）的日子，在五行中属火。宜静不宜动，宜养不宜泄，犯者皆得病。</li>                
+                <li><strong>上弦日</strong>（初七、初八） 和 <strong>下弦日：</strong>（廿二、廿三） 是月相周期中气场不稳定、阴阳力量转换的关键日期，此时应戒欲静养，犯者减寿一年。</li>
+                
+                <li><strong>三元日：</strong>农历正月十五、七月十五、十月十五，为上中下三元。犯之减寿五年。</li>
+                <li><strong>四立日</strong>(立春、立夏、立秋、立冬)。<strong>四离日</strong>(冬至、夏至、春分、秋分的前一日)。<strong>四绝日</strong>(四立日的前一日)。<strong>二社日</strong>(立春后的第五个戊日为春社日，立秋后的第五个戊日为秋社日)。犯之皆减寿五年。社日受胎者，毛发皆白。</li>
+                <li><strong>毁败日：</strong>大月十八日，小月十七日。犯之得病。</li>
+                <li><strong>十恶大败日：</strong>甲己年，三月戊戌日，七月癸亥日，十月丙申日，十一月丁亥日。乙庚年，四月壬申日，九月乙巳日。丙辛年，三月辛巳日，九月庚辰日，十月甲辰日。丁壬年，无忌。戊癸年，六月己丑日。此皆大不吉之日，宜戒。</li>
+                <li><strong>阴错日：</strong>正月庚戌日，二月辛酉日，三月庚申日，四月丁未日，五月丙午日，六月丁巳日，七月甲辰日，八月乙卯日，九月甲寅日，十月癸丑日，十一月壬子日，十二月癸亥日。此阴不足之日，俱宜戒。</li>
+                <li><strong>阳错日：</strong>正月甲寅日，二月乙卯日，三月甲辰日，四月丁已日，五月丙午日，六月丁未日，七月庚申日，八月辛酉日，九月庚戌日，十月癸亥日，十一月壬子日，十二月癸丑日。此阳不足之日，俱宜戒。</li>
+
+
+
             </ul>
         </div>
 
@@ -1172,13 +1188,141 @@
                             festivalsContainer.appendChild(festival);
                         }
 
-                        // 冬至日±3判断
-                        var dongzhiDay = sTerm(year, 23);
-                        var isDongzhiRange = (day >= dongzhiDay - 3 && day <= dongzhiDay + 3);
+                        // 四节气±3判断（春分、秋分、夏至、冬至）
+                        var lichunDay = sTerm(year, 2);    // 立春
+                        var chunfenDay = sTerm(year, 5);   // 春分
+                        var lixiaDay = sTerm(year, 8);     // 立夏
+                        var xiazhiDay = sTerm(year, 11);   // 夏至
+                        var liqiuDay = sTerm(year, 14);    // 立秋
+                        var qiufenDay = sTerm(year, 17);   // 秋分
+                        var lidongDay = sTerm(year, 20);   // 立冬
+                        var dongzhiDay = sTerm(year, 23);  // 冬至
+
+                        // 四立日
+                        var isSiLi = (month === Math.floor(2/2) && day === lichunDay) || (month === Math.floor(8/2) && day === lixiaDay) || (month === Math.floor(14/2) && day === liqiuDay) || (month === Math.floor(20/2) && day === lidongDay);
+                        // 四绝日（四立日前一日）
+                        var isSiJue = (month === Math.floor(2/2) && day === lichunDay - 1) || (month === Math.floor(8/2) && day === lixiaDay - 1) || (month === Math.floor(14/2) && day === liqiuDay - 1) || (month === Math.floor(20/2) && day === lidongDay - 1);
+                        // 四离日（春分、秋分、夏至、冬至前一日）
+                        var isSiLi2 = (month === Math.floor(5/2) && day === chunfenDay - 1) || (month === Math.floor(11/2) && day === xiazhiDay - 1) || (month === Math.floor(17/2) && day === qiufenDay - 1) || (month === Math.floor(23/2) && day === dongzhiDay - 1);
+
+                        // 二社日判断（立春后第5个戊日，立秋后第5个戊日）
+                        var isSheRi = false;
+                        var lichunDate = new Date(year, Math.floor(2/2), lichunDay);
+                        var liqiuDate = new Date(year, Math.floor(14/2), liqiuDay);
+                        var currentDate = new Date(year, month, day);
+                        var lichunLunar = new Lunar(lichunDate);
+                        var liqiuLunar = new Lunar(liqiuDate);
+
+                        // 计算立春后第5个戊日
+                        var wuCount = 0;
+                        for(var d = lichunDay; d <= solarDays(year, Math.floor(2/2)) && wuCount < 5; d++) {
+                            var tempDate = new Date(year, Math.floor(2/2), d);
+                            var tempLunar = new Lunar(tempDate);
+                            if(tempLunar.dayCyl % 10 === 4) { // 戊的天干索引是4
+                                wuCount++;
+                                if(wuCount === 5 && month === Math.floor(2/2) && day === d) {
+                                    isSheRi = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // 计算立秋后第5个戊日
+                        if(!isSheRi) {
+                            wuCount = 0;
+                            for(var d = liqiuDay; d <= solarDays(year, Math.floor(14/2)) && wuCount < 5; d++) {
+                                var tempDate = new Date(year, Math.floor(14/2), d);
+                                var tempLunar = new Lunar(tempDate);
+                                if(tempLunar.dayCyl % 10 === 4) {
+                                    wuCount++;
+                                    if(wuCount === 5 && month === Math.floor(14/2) && day === d) {
+                                        isSheRi = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if(isSheRi) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※二社日，犯之减寿五年。社日受胎者，毛发皆白';
+                            festivalsContainer.appendChild(festival);
+                        }
+
+                        if(isSiLi || isSiJue || isSiLi2) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※宜戒，犯之减寿五年';
+                            festivalsContainer.appendChild(festival);
+                        }
+
+                        var isChunfenRange = (month === Math.floor(5/2) && day >= chunfenDay - 3 && day <= chunfenDay + 3);
+                        var isXiazhiRange = (month === Math.floor(11/2) && day >= xiazhiDay - 3 && day <= xiazhiDay + 3);
+                        var isQiufenRange = (month === Math.floor(17/2) && day >= qiufenDay - 3 && day <= qiufenDay + 3);
+                        var isDongzhiRange = (month === Math.floor(23/2) && day >= dongzhiDay - 3 && day <= dongzhiDay + 3);
+
+                        if(isChunfenRange) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※春分日±3，必得急疾，尤宜切戒';
+                            festivalsContainer.appendChild(festival);
+                        }
+                        if(isXiazhiRange) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※夏至日±3，必得急疾，尤宜切戒';
+                            festivalsContainer.appendChild(festival);
+                        }
+                        if(isQiufenRange) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※秋分日±3，必得急疾，尤宜切戒';
+                            festivalsContainer.appendChild(festival);
+                        }
                         if(isDongzhiRange) {
                             var festival = document.createElement('div');
                             festival.className = 'festival lunar-festival';
                             festival.textContent = '※冬至日±3，必得急疾，尤宜切戒';
+                            festivalsContainer.appendChild(festival);
+                        }
+
+                        // 三元日判断
+                        var isSanYuan = (lunarDate.day === 15 && (lunarDate.month === 1 || lunarDate.month === 7 || lunarDate.month === 10));
+                        if(isSanYuan) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※三元日，犯之减寿五年';
+                            festivalsContainer.appendChild(festival);
+                        }
+
+                        // 阴错日判断
+                        var yincuoMap = {1:'庚戌',2:'辛酉',3:'庚申',4:'丁未',5:'丙午',6:'丁巳',7:'甲辰',8:'乙卯',9:'甲寅',10:'癸丑',11:'壬子',12:'癸亥'};
+                        var isYinCuo = (yincuoMap[lunarDate.month] === cyclical(lunarDate.dayCyl));
+                        if(isYinCuo) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※阴错日，此阴不足之日，俱宜戒';
+                            festivalsContainer.appendChild(festival);
+                        }
+
+                        // 阳错日判断
+                        var yangcuoMap = {1:'甲寅',2:'乙卯',3:'甲辰',4:'丁巳',5:'丙午',6:'丁未',7:'庚申',8:'辛酉',9:'庚戌',10:'癸亥',11:'壬子',12:'癸丑'};
+                        var isYangCuo = (yangcuoMap[lunarDate.month] === cyclical(lunarDate.dayCyl));
+                        if(isYangCuo) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※阳错日，此阳不足之日，俱宜戒';
+                            festivalsContainer.appendChild(festival);
+                        }
+
+                        // 毁败日判断
+                        var monthDaysCount = monthDays(lunarDate.year, lunarDate.month);
+                        var isHuiBai = (monthDaysCount === 30 && lunarDate.day === 18) || (monthDaysCount === 29 && lunarDate.day === 17);
+                        if(isHuiBai) {
+                            var festival = document.createElement('div');
+                            festival.className = 'festival lunar-festival';
+                            festival.textContent = '※毁败日，犯之得病';
                             festivalsContainer.appendChild(festival);
                         }
 
@@ -1214,7 +1358,7 @@
 
 
                         // 判断是否为安全日
-                        if(!hasLunarFestival && !isBingDing && !isSanXin && !isShangXian && !isXiaXian && !isDongzhiRange) {
+                        if(!hasLunarFestival && !isBingDing && !isSanXin && !isSanYuan && !isYinCuo && !isYangCuo && !isHuiBai && !isSiLi && !isSiJue && !isSiLi2 && !isSheRi && !isShangXian && !isXiaXian && !isChunfenRange && !isXiazhiRange && !isQiufenRange && !isDongzhiRange) {
                             lunarDayDiv.classList.add('safe-day');
                             var safeTip = document.createElement('div');
                             safeTip.className = 'festival safe-day-tip';
