@@ -1,91 +1,60 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>人生格言+</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人生格言网</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="shortcut icon" href="/icon/quote-right-32x32.png" type="image/png" />
 </head>
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
-
+<body class="bg-gradient-to-b from-white to-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
   <!-- Header -->
-  <!-- 页面标题 -->
-  <header class="text-center py-4 bg-white shadow-sm">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">人生格言+</h1>
-    <p class="text-sm md:text-base text-gray-500 mt-1">Find your words to live by.</p>
+  <header class="text-center py-8 bg-white shadow-md sticky top-0 z-10">
+    <h1 class="text-4xl font-bold mb-2 text-gray-900">人生格言网</h1>
+    <p class="text-gray-600 text-lg">启迪智慧 · 温暖人心 · 照亮前路</p>
   </header>
 
   <!-- Main Content -->
-  <main class="flex-grow p-4">
-    <div class="grid grid-cols-2 gap-4">
-      
-      <!-- 励志劝学 -->
-      <a href="lizhi.html" 
-         class="flex items-center justify-center bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-xl shadow-md h-28 hover:scale-105 transition">
-        <span class="text-lg font-semibold">励志劝学</span>
-      </a>
+  <main class="flex-grow container mx-auto px-4 py-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Quote Card 1 -->
+    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
+      <h2 class="text-xl font-semibold mb-2">人生在勤，不索何获。</h2>
+      <p class="text-gray-600">—— 张衡</p>
+    </div>
 
-      <!-- 敬天爱人 -->
-      <a href="jingtian.html" 
-         class="flex items-center justify-center bg-gradient-to-r from-green-400 to-green-600 text-white rounded-xl shadow-md h-28 hover:scale-105 transition">
-        <span class="text-lg font-semibold">敬天爱人</span>
-      </a>
+    <!-- Quote Card 2 -->
+    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
+      <h2 class="text-xl font-semibold mb-2">不登高山，不知天之高；不临深溪，不知地之厚。</h2>
+      <p class="text-gray-600">—— 《荀子》</p>
+    </div>
 
-      <!-- 孝亲尊师 -->
-      <a href="xiao.html" 
-         class="flex items-center justify-center bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-xl shadow-md h-28 hover:scale-105 transition">
-        <span class="text-lg font-semibold">孝亲尊师</span>
-      </a>
+    <!-- Quote Card 3 -->
+    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
+      <h2 class="text-xl font-semibold mb-2">志不立，天下无可成之事。</h2>
+      <p class="text-gray-600">—— 王阳明</p>
+    </div>
 
-      <!-- 爱情婚姻 -->
-      <a href="aiqing.html" 
-         class="flex items-center justify-center bg-gradient-to-r from-pink-400 to-pink-600 text-white rounded-xl shadow-md h-28 hover:scale-105 transition">
-        <span class="text-lg font-semibold">爱情婚姻</span>
-      </a>
+    <!-- Quote Card 4 -->
+    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
+      <h2 class="text-xl font-semibold mb-2">心有多大，舞台就有多大。</h2>
+      <p class="text-gray-600">—— 佚名</p>
+    </div>
 
-      <!-- 健康财富 -->
-      <a href="jiankang.html" 
-         class="flex items-center justify-center bg-gradient-to-r from-teal-400 to-teal-600 text-white rounded-xl shadow-md h-28 hover:scale-105 transition">
-        <span class="text-lg font-semibold">健康财富</span>
-      </a>
+    <!-- Quote Card 5 -->
+    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
+      <h2 class="text-xl font-semibold mb-2">知足不辱，知止不殆。</h2>
+      <p class="text-gray-600">—— 《老子》</p>
+    </div>
 
-      <!-- 自由幸福 -->
-      <a href="ziyou.html" 
-         class="flex items-center justify-center bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-xl shadow-md h-28 hover:scale-105 transition">
-        <span class="text-lg font-semibold">自由幸福</span>
-      </a>
-
-      <!-- 因果轮回 -->
-      <a href="yinguo.html" 
-         class="flex items-center justify-center bg-gradient-to-r from-red-400 to-red-600 text-white rounded-xl shadow-md h-28 hover:scale-105 transition">
-        <span class="text-lg font-semibold">因果轮回</span>
-      </a>
-
-      <!-- 死生事大 -->
-      <a href="sisheng.html" 
-         class="flex items-center justify-center bg-gradient-to-r from-gray-500 to-gray-700 text-white rounded-xl shadow-md h-28 hover:scale-105 transition">
-        <span class="text-lg font-semibold">死生事大</span>
-      </a>
-
+    <!-- Quote Card 6 -->
+    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
+      <h2 class="text-xl font-semibold mb-2">路漫漫其修远兮，吾将上下而求索。</h2>
+      <p class="text-gray-600">—— 屈原</p>
     </div>
   </main>
 
-  <!-- 底部导航栏（三个按钮） -->
-  <footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex justify-around text-xs">
-    <button class="flex flex-col items-center text-gray-700 hover:text-indigo-600 transition">
-      <span class="text-xl">📚</span>
-      <span>格言</span>
-    </button>
-    <a href="./calendar/foli.html" class="flex flex-col items-center text-gray-700 hover:text-green-600 transition">
-      <span class="text-xl">📅</span>
-      <span>日历</span>
-    </a>
-    <a href="./quote_card_designer.html" class="flex flex-col items-center text-gray-700 hover:text-gray-900 transition">
-      <span class="text-xl">🏹</span>
-      <span>格言设计PC版</span>
-    </button>
+  <!-- Footer -->
+  <footer class="bg-gray-100 border-t border-gray-200 py-4 text-center text-gray-500 text-sm">
+    <p>© 2025 人生格言网 ｜ <a href="https://beian.miit.gov.cn/" class="hover:text-blue-600" target="_blank">苏ICP备2025216372号-1</a></p>
   </footer>
-
 </body>
 </html>
