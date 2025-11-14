@@ -1,60 +1,394 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>人生格言网</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>人生格言网 | Motto Collection</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 简化样式 */
+    :root {
+      --glass-bg: rgba(255,255,255,0.6);
+      --glass-border: rgba(255,255,255,0.35);
+    }
+    .dark :root {
+      --glass-bg: rgba(15,23,42,0.45);
+      --glass-border: rgba(255,255,255,0.06);
+    }
+    
+    /* 基础样式 */
+    main, header, footer {
+      position: relative;
+      z-index: 10;
+    }
+    
+    /* 毛玻璃效果 */
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+    }
+    
+    /* 头部样式 */
+    header.site-header {
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
+      backdrop-filter: blur(6px);
+    }
+    .dark header.site-header {
+      background: linear-gradient(180deg, rgba(6,8,15,0.6), rgba(6,8,15,0.4));
+    }
+    .dark body {
+      background-color: #06070a;
+    }
+    
+    /* Logo样式 */
+    .logo-wrap {
+      height: 64px;
+      display: flex;
+      align-items: center;
+    }
+    .logo-img {
+      height: 100%;
+      width: auto;
+      display: block;
+    }
+    
+    /* 响应式调整 */
+    .header-inner {
+      height: 64px;
+    }
+    @media (max-width: 768px) {
+      .header-inner {
+        height: 56px;
+      }
+      .logo-wrap {
+        height: 56px;
+      }
+    }
+    
+    /* 简化动画 */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: transform .45s cubic-bezier(.2,.9,.2,1), opacity .45s;
+    }
+    .fade-up.in {
+      opacity: 1;
+      transform: none;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px) scale(1.01);
+      transition: transform .25s;
+    }
+    
+    /* 主题切换按钮样式 */
+    .theme-toggle {
+      transition: all 0.3s ease;
+    }
+    .theme-toggle:hover {
+      transform: rotate(12deg);
+    }
+    
+    /* 语言切换按钮样式 */
+    .lang-toggle {
+      transition: all 0.3s ease;
+    }
+    .lang-toggle:hover {
+      transform: scale(1.1);
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-b from-white to-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
-  <!-- Header -->
-  <header class="text-center py-8 bg-white shadow-md sticky top-0 z-10">
-    <h1 class="text-4xl font-bold mb-2 text-gray-900">人生格言网</h1>
-    <p class="text-gray-600 text-lg">启迪智慧 · 温暖人心 · 照亮前路</p>
+
+<body class="antialiased text-gray-900 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+
+  <!-- 头部 -->
+  <header class="site-header fixed w-full top-0 left-0 z-40 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 header-inner flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="logo-wrap flex items-center gap-3">
+        <img src="./image/motto-logo.png" alt="人生格言网 Logo" class="logo-img">
+      </a>
+
+      <!-- 桌面导航 -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-700 dark:text-slate-200">
+        <a href="#" class="hover:text-blue-600" data-en="Wisdom">智慧箴言</a>
+        <a href="#" class="hover:text-blue-600" data-en="Card Design">卡片设计</a>
+        <a href="#" class="hover:text-blue-600" data-en="Vegetarian Map">素食地图</a>
+        <a href="#" class="hover:text-blue-600" data-en="Practice Calendar">修行日历</a>
+        <a href="#" class="hover:text-blue-600" data-en="English Learning">英语学习</a>
+      </nav>
+
+      <!-- 操作按钮 -->
+      <div class="flex items-center gap-3">
+        <!-- 语言切换按钮 -->
+        <button id="langToggle" class="lang-toggle p-2 rounded-md glass-card text-sm flex items-center gap-1" title="切换语言">
+          <span class="lang-zh">中</span>
+          <span class="lang-en hidden">EN</span>
+        </button>
+        
+        <!-- 主题切换按钮 -->
+        <button id="themeToggle" class="theme-toggle p-2 rounded-md glass-card" title="切换主题">
+          <!-- 浅色模式图标 -->
+          <svg id="lightIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+          </svg>
+          <!-- 深色模式图标 -->
+          <svg id="darkIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+        </button>
+        
+        <!-- 移动端菜单按钮 -->
+        <button id="menuBtn" class="md:hidden p-2 rounded-md bg-white/60 dark:bg-black/40">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 移动端导航 -->
+    <nav id="mobileMenu" class="md:hidden hidden bg-white/80 dark:bg-black/50">
+      <div class="px-4 py-3 flex flex-col gap-2">
+        <a href="#" class="py-2 border-b" data-en="Wisdom">智慧箴言</a>
+        <a href="#" class="py-2 border-b" data-en="Card Design">卡片设计</a>
+        <a href="#" class="py-2 border-b" data-en="Vegetarian Map">素食地图</a>
+        <a href="#" class="py-2 border-b" data-en="Practice Calendar">修行日历</a>
+        <a href="#" class="py-2 border-b" data-en="English Learning">英语学习</a>
+      </div>
+    </nav>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow container mx-auto px-4 py-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <!-- Quote Card 1 -->
-    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
-      <h2 class="text-xl font-semibold mb-2">人生在勤，不索何获。</h2>
-      <p class="text-gray-600">—— 张衡</p>
-    </div>
+  <!-- 主内容 -->
+  <main class="max-w-6xl mx-auto px-4 pt-36 pb-16 relative">
+    <!-- 横幅 -->
+    <section class="rounded-2xl overflow-hidden mb-8 relative">
+      <img src="https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1600&q=80" alt="背景" class="w-full h-56 object-cover rounded-2xl shadow-lg">
+      <div class="absolute inset-0 flex items-center justify-start pl-8">
+        <div class="bg-black/30 text-white p-4 rounded-lg">
+          <h1 class="text-3xl font-bold" data-en="Daily Wisdom · Warmth and Wisdom">每日一言 · 温暖与智慧同行</h1>
+          <p class="mt-2 text-sm opacity-80" data-en="Explore mottos from ancient and modern times, collect your inspiration.">探索来自古今中外的格言，收藏你的灵感。</p>
+        </div>
+      </div>
+    </section>
 
-    <!-- Quote Card 2 -->
-    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
-      <h2 class="text-xl font-semibold mb-2">不登高山，不知天之高；不临深溪，不知地之厚。</h2>
-      <p class="text-gray-600">—— 《荀子》</p>
-    </div>
+    <!-- 卡片网格 -->
+    <section class="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
+      <!-- 卡片1 -->
+      <article class="glass-card p-5 rounded-2xl shadow-sm card-hover fade-up" data-delay="0">
+        <div>
+          <p class="text-lg font-medium leading-relaxed" data-en="Life lies in diligence, no gains without pains.">人生在勤，不索何获。</p>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">—— 张衡</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex gap-3">
+            <button class="copy-btn px-3 py-1 rounded-md bg-emerald-500 text-white text-sm" data-en="Copy">复制</button>
+            <button class="fav-btn px-3 py-1 rounded-md bg-yellow-400 text-sm text-slate-900" data-en="Favorite">收藏</button>
+            <button class="share-btn px-3 py-1 rounded-md border text-sm" data-en="Share">分享</button>
+          </div>
+          <div class="text-xs opacity-70" data-en="Philosophy · Life">哲学 · 人生</div>
+        </div>
+      </article>
 
-    <!-- Quote Card 3 -->
-    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
-      <h2 class="text-xl font-semibold mb-2">志不立，天下无可成之事。</h2>
-      <p class="text-gray-600">—— 王阳明</p>
-    </div>
+      <!-- 卡片2 -->
+      <article class="glass-card p-5 rounded-2xl shadow-sm card-hover fade-up" data-delay="80">
+        <div>
+          <p class="text-lg font-medium leading-relaxed" data-en="Without climbing mountains, one cannot know the height of heaven; without descending into valleys, one cannot know the thickness of earth.">不登高山，不知天之高；不临深溪，不知地之厚。</p>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">—— 《荀子》</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex gap-3">
+            <button class="copy-btn px-3 py-1 rounded-md bg-emerald-500 text-white text-sm" data-en="Copy">复制</button>
+            <button class="fav-btn px-3 py-1 rounded-md bg-yellow-400 text-sm text-slate-900" data-en="Favorite">收藏</button>
+            <button class="share-btn px-3 py-1 rounded-md border text-sm" data-en="Share">分享</button>
+          </div>
+          <div class="text-xs opacity-70" data-en="Inspiration · Insight">励志 · 见识</div>
+        </div>
+      </article>
 
-    <!-- Quote Card 4 -->
-    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
-      <h2 class="text-xl font-semibold mb-2">心有多大，舞台就有多大。</h2>
-      <p class="text-gray-600">—— 佚名</p>
-    </div>
+      <!-- 卡片3 -->
+      <article class="glass-card p-5 rounded-2xl shadow-sm card-hover fade-up" data-delay="160">
+        <div>
+          <p class="text-lg font-medium leading-relaxed" data-en="Without ambition, nothing can be accomplished in the world.">志不立，天下无可成之事。</p>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">—— 王阳明</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex gap-3">
+            <button class="copy-btn px-3 py-1 rounded-md bg-emerald-500 text-white text-sm" data-en="Copy">复制</button>
+            <button class="fav-btn px-3 py-1 rounded-md bg-yellow-400 text-sm text-slate-900" data-en="Favorite">收藏</button>
+            <button class="share-btn px-3 py-1 rounded-md border text-sm" data-en="Share">分享</button>
+          </div>
+          <div class="text-xs opacity-70" data-en="Cultivation · Inspiration">修养 · 励志</div>
+        </div>
+      </article>
 
-    <!-- Quote Card 5 -->
-    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
-      <h2 class="text-xl font-semibold mb-2">知足不辱，知止不殆。</h2>
-      <p class="text-gray-600">—— 《老子》</p>
-    </div>
+      <!-- 卡片4 -->
+      <article class="glass-card p-5 rounded-2xl shadow-sm card-hover fade-up" data-delay="240">
+        <div>
+          <p class="text-lg font-medium leading-relaxed" data-en="A single spark can start a prairie fire.">星星之火，可以燎原。</p>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">—— 佚名</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex gap-3">
+            <button class="copy-btn px-3 py-1 rounded-md bg-emerald-500 text-white text-sm" data-en="Copy">复制</button>
+            <button class="fav-btn px-3 py-1 rounded-md bg-yellow-400 text-sm text-slate-900" data-en="Favorite">收藏</button>
+            <button class="share-btn px-3 py-1 rounded-md border text-sm" data-en="Share">分享</button>
+          </div>
+          <div class="text-xs opacity-70" data-en="Revolution · Inspiration">革命 · 励志</div>
+        </div>
+      </article>
 
-    <!-- Quote Card 6 -->
-    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition-shadow duration-300">
-      <h2 class="text-xl font-semibold mb-2">路漫漫其修远兮，吾将上下而求索。</h2>
-      <p class="text-gray-600">—— 屈原</p>
-    </div>
+      <!-- 卡片5 -->
+      <article class="glass-card p-5 rounded-2xl shadow-sm card-hover fade-up" data-delay="320">
+        <div>
+          <p class="text-lg font-medium leading-relaxed" data-en="Nothing is difficult in the world if you put your heart into it.">世上无难事，只要肯登攀。</p>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">—— 佚名</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex gap-3">
+            <button class="copy-btn px-3 py-1 rounded-md bg-emerald-500 text-white text-sm" data-en="Copy">复制</button>
+            <button class="fav-btn px-3 py-1 rounded-md bg-yellow-400 text-sm text-slate-900" data-en="Favorite">收藏</button>
+            <button class="share-btn px-3 py-1 rounded-md border text-sm" data-en="Share">分享</button>
+          </div>
+          <div class="text-xs opacity-70" data-en="Inspiration · Endeavor">励志 · 奋进</div>
+        </div>
+      </article>
+
+      <!-- 卡片6 -->
+      <article class="glass-card p-5 rounded-2xl shadow-sm card-hover fade-up" data-delay="400">
+        <div>
+          <p class="text-lg font-medium leading-relaxed" data-en="Study for the rise of China.">为中华之崛起而读书。</p>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">—— 佚名</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex gap-3">
+            <button class="copy-btn px-3 py-1 rounded-md bg-emerald-500 text-white text-sm" data-en="Copy">复制</button>
+            <button class="fav-btn px-3 py-1 rounded-md bg-yellow-400 text-sm text-slate-900" data-en="Favorite">收藏</button>
+            <button class="share-btn px-3 py-1 rounded-md border text-sm" data-en="Share">分享</button>
+          </div>
+          <div class="text-xs opacity-70" data-en="Learning · Struggle">学习 · 奋斗</div>
+        </div>
+      </article>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-gray-100 border-t border-gray-200 py-4 text-center text-gray-500 text-sm">
-    <p>© 2025 人生格言网 ｜ <a href="https://beian.miit.gov.cn/" class="hover:text-blue-600" target="_blank">苏ICP备2025216372号-1</a></p>
+  <!-- 页脚 -->
+  <footer class="max-w-6xl mx-auto px-4 pb-8 text-center text-sm text-slate-600">
+    <div class="flex items-center justify-center gap-2 mb-2">
+      © 2025 <span data-en="Motto Collection">人生格言网</span>
+      <img src="https://beian.mps.gov.cn/web/assets/logo01.6189a29f.png" class="h-5" alt="公安备案">
+      <a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050502012786" target="_blank" rel="noreferrer">苏公网安备32050502012786号</a>
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">苏ICP备2025216372号-1</a>
+    </div>
   </footer>
+
+  <!-- 脚本 -->
+  <script>
+    // 移动菜单切换
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+    // 主题切换功能
+    const themeToggle = document.getElementById('themeToggle');
+    const lightIcon = document.getElementById('lightIcon');
+    const darkIcon = document.getElementById('darkIcon');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('site-theme');
+    
+    function applyTheme(isDark) {
+      if(isDark) { 
+        document.documentElement.classList.add('dark'); 
+        localStorage.setItem('site-theme','dark');
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      } else { 
+        document.documentElement.classList.remove('dark'); 
+        localStorage.setItem('site-theme','light');
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
+      }
+    }
+    
+    // 初始化主题
+    if(savedTheme) {
+      applyTheme(savedTheme === 'dark');
+    } else {
+      applyTheme(prefersDark);
+    }
+    
+    // 主题切换事件
+    themeToggle.addEventListener('click', () => {
+      applyTheme(!document.documentElement.classList.contains('dark'));
+    });
+
+    // 语言切换功能
+    const langToggle = document.getElementById('langToggle');
+    const langZh = document.querySelector('.lang-zh');
+    const langEn = document.querySelector('.lang-en');
+    let currentLang = localStorage.getItem('site-lang') || 'zh';
+    
+    function applyLanguage(lang) {
+      const elements = document.querySelectorAll('[data-en]');
+      
+      elements.forEach(element => {
+        if (lang === 'en') {
+          // 切换到英文
+          if (element.textContent !== element.getAttribute('data-en')) {
+            element.setAttribute('data-zh', element.textContent);
+            element.textContent = element.getAttribute('data-en');
+          }
+        } else {
+          // 切换到中文
+          if (element.hasAttribute('data-zh')) {
+            element.textContent = element.getAttribute('data-zh');
+          }
+        }
+      });
+      
+      // 更新语言按钮显示
+      if (lang === 'en') {
+        langZh.classList.add('hidden');
+        langEn.classList.remove('hidden');
+      } else {
+        langZh.classList.remove('hidden');
+        langEn.classList.add('hidden');
+      }
+      
+      // 更新页面语言属性
+      document.documentElement.lang = lang;
+      
+      // 保存语言设置
+      localStorage.setItem('site-lang', lang);
+      currentLang = lang;
+    }
+    
+    // 初始化语言
+    applyLanguage(currentLang);
+    
+    // 语言切换事件
+    langToggle.addEventListener('click', () => {
+      applyLanguage(currentLang === 'zh' ? 'en' : 'zh');
+    });
+
+    // 滚动动画
+    function animateOnScroll() {
+      document.querySelectorAll('.fade-up').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight - 60) {
+          el.classList.add('in');
+        }
+      });
+    }
+    
+    animateOnScroll();
+    window.addEventListener('scroll', animateOnScroll);
+
+    // 延迟动画
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      const d = el.getAttribute('data-delay') || 0;
+      el.style.transitionDelay = (d/1000) + 's';
+    });
+  </script>
 </body>
 </html>
