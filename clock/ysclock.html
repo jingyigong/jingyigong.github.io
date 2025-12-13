@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>传统十二时辰养生时钟</title>
+    <style>
+        @import url('https://fonts.loli.net/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: "Noto Serif SC", "STKaiti", "KaiTi", serif;
+            color: #f4e4c1;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Ma Shan Zheng', cursive;
+            color: #f4e4c1;
+            font-size: 3rem;
+            /* slightly larger */
+            margin-bottom: 30px;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            letter-spacing: 2px;
+        }
+
+        .clock-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            aspect-ratio: 1;
+        }
+
+        .clock-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .clock-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .clock-face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: 50% 100%;
+        }
+
+        .hour-hand,
+        .minute-hand {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hour-hand {
+            width: 6px;
+            height: 35%;
+            background: linear-gradient(to top, #8b0000, #dc143c);
+            margin-left: -3px;
+            border-radius: 3px 3px 0 0;
+            z-index: 3;
+        }
+
+        .minute-hand {
+            width: 4px;
+            height: 42%;
+            background: linear-gradient(to top, #2c3e50, #34495e);
+            margin-left: -2px;
+            border-radius: 2px 2px 0 0;
+            z-index: 4;
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 45%;
+            background: #dc143c;
+            margin-left: -1px;
+            border-radius: 1px 1px 0 0;
+            z-index: 5;
+        }
+
+        .center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #8b0000, #dc143c);
+            border: 2px solid #f4e4c1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .digital-time {
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+            /* Monospace for numbers */
+            font-size: 2.5rem;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .shichen-info {
+            margin-top: 20px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            /* Lighter glass */
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .shichen-name {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2.2rem;
+            color: #f4e4c1;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .jingluo {
+            font-size: 1.2rem;
+            color: #e74c3c;
+            /* Brighter red */
+            background: rgba(231, 76, 60, 0.1);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .advice {
+            font-size: 1rem;
+            color: #e8d4a8;
+            line-height: 1.6;
+        }
+
+
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .digital-time {
+                font-size: 1.5rem;
+            }
+
+            .shichen-name {
+                font-size: 1.4rem;
+            }
+
+            .jingluo {
+                font-size: 1.1rem;
+            }
+
+            .advice {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>传统十二时辰养生时钟</h1>
+
+        <div class="clock-wrapper">
+            <div class="clock-container">
+                <img src="ysclock.jpg" alt="养生时钟表盘" class="clock-bg">
+                <div class="clock-face">
+                    <div class="hand hour-hand" id="hourHand"></div>
+                    <div class="hand minute-hand" id="minuteHand"></div>
+                    <div class="hand second-hand" id="secondHand"></div>
+                    <div class="center-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="digital-time" id="digitalTime"></div>
+
+        <div class="shichen-info">
+            <div class="shichen-name" id="shichenName"></div>
+            <div class="jingluo" id="jingluo"></div>
+            <div class="advice" id="advice"></div>
+        </div>
+
+
+    </div>
+
+    <script>
+        const shichenData = [
+            { name: '子时', time: '23:00-01:00', start: 23, end: 1, jingluo: '胆经', advice: '胆经当令，深度睡眠时间。此时应进入深度睡眠，胆排毒修复，不宜熬夜。' },
+            { name: '丑时', time: '01:00-03:00', start: 1, end: 3, jingluo: '肝经', advice: '肝经当令，肝脏排毒黄金时间。必须熟睡，否则影响肝脏解毒功能，易生肝病。' },
+            { name: '寅时', time: '03:00-05:00', start: 3, end: 5, jingluo: '肺经', advice: '肺经当令，肺部调节时间。深度睡眠有助于肺部功能，呼吸系统疾病者易在此时发作。' },
+            { name: '卯时', time: '05:00-07:00', start: 5, end: 7, jingluo: '大肠经', advice: '大肠经当令，排便最佳时间。应起床喝温水，促进大肠蠕动排毒，养成定时排便习惯。' },
+            { name: '辰时', time: '07:00-09:00', start: 7, end: 9, jingluo: '胃经', advice: '胃经当令，吃早餐的黄金时间。胃消化能力最强，必须吃营养丰富的早餐，忌空腹。' },
+            { name: '巳时', time: '09:00-11:00', start: 9, end: 11, jingluo: '脾经', advice: '脾经当令，脾运化营养。工作学习效率最高，适合处理重要事务，脾虚者易疲倦。' },
+            { name: '午时', time: '11:00-13:00', start: 11, end: 13, jingluo: '心经', advice: '心经当令，宜小憩养心血。小憩15-30分钟可养心护心，提升下午精力，忌剧烈运动。' },
+            { name: '未时', time: '13:00-15:00', start: 13, end: 15, jingluo: '小肠经', advice: '小肠经当令，小肠吸收营养。午餐营养在此时被吸收，适合工作但不宜过劳。' },
+            { name: '申时', time: '15:00-17:00', start: 15, end: 17, jingluo: '膀胱经', advice: '膀胱经当令，膀胱排毒时间。多喝水促进排尿，适合学习和工作，是下午的黄金时段。' },
+            { name: '酉时', time: '17:00-19:00', start: 17, end: 19, jingluo: '肾经', advice: '肾经当令，肾藏精时间。适合学习、工作总结，晚餐宜清淡，补肾佳时。' },
+            { name: '戌时', time: '19:00-21:00', start: 19, end: 21, jingluo: '心包经', advice: '心包经当令，保护心脏。放松心情，散步、娱乐，准备入睡，可适当进行轻松活动。' },
+            { name: '亥时', time: '21:00-23:00', start: 21, end: 23, jingluo: '三焦经', advice: '三焦经当令，三焦通百脉。应准备睡眠，调节内分泌，不宜剧烈活动，宜静养。' }
+        ];
+
+        function getCurrentShichen(hour) {
+            for (let sc of shichenData) {
+                if (sc.start < sc.end) {
+                    if (hour >= sc.start && hour < sc.end) return sc;
+                } else {
+                    if (hour >= sc.start || hour < sc.end) return sc;
+                }
+            }
+            return shichenData[0];
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const milliseconds = now.getMilliseconds();
+
+            const secondAngle = (seconds + milliseconds / 1000) * 6;
+            const minuteAngle = (minutes + seconds / 60) * 6;
+            const hourAngle = ((hours % 12) + minutes / 60) * 30;
+
+            document.getElementById('secondHand').style.transform = `rotate(${secondAngle}deg)`;
+            document.getElementById('minuteHand').style.transform = `rotate(${minuteAngle}deg)`;
+            document.getElementById('hourHand').style.transform = `rotate(${hourAngle}deg)`;
+
+            document.getElementById('digitalTime').textContent =
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            const currentSc = getCurrentShichen(hours);
+            document.getElementById('shichenName').textContent = `${currentSc.name}（${currentSc.time}）`;
+            document.getElementById('jingluo').textContent = currentSc.jingluo;
+            document.getElementById('advice').textContent = currentSc.advice;
+        }
+
+
+
+        function loop() {
+            updateClock();
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+
+</html>
