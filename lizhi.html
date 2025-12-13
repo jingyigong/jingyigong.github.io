@@ -1,319 +1,221 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>人生格言+ | 励志劝学</title>
+
+  <!-- SEO & Meta Tags -->
+  <title>人生格言+ | 智慧箴言与励志金句</title>
+  <meta name="description" content="探索人生智慧，收藏励志金句。提供海量古今中外名言警句，支持搜索、筛选与收藏，助您在人生道路上砥砺前行。" />
+  <meta name="keywords" content="格言, 语录, 励志, 哲学, 古籍, 名人名言, 智慧箴言, 每日一句" />
+  <meta name="author" content="人生格言网" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="人生格言+ | 智慧与灵感的源泉" />
+  <meta property="og:description" content="发现触动心灵的文字，收藏指引人生的智慧。" />
+  <meta property="og:image" content="./image/logo512.png" />
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="shortcut icon" href="/icon/quote-right-32x32.png" type="image/png" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <link rel="icon" type="image/png" href="./icon/quote-right-32x32.png" />
+  <link rel="apple-touch-icon" href="./icon/quote-right-128x128.png" />
+
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/lizhi-enhanced.css">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Ma+Shan+Zheng&display=swap');
-    
-    /* 自定义动画 */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* 头部样式复用 */
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.35);
     }
-    
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-5px);
-      }
+
+    html.dark {
+      --glass-bg: rgba(15, 23, 42, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.06);
     }
-    
-    .fade-in-up {
-      animation: fadeInUp 0.6s ease-out forwards;
+
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
     }
-    
-    .float-animation {
-      animation: float 3s ease-in-out infinite;
+
+    /* 头部样式覆盖 */
+    header.site-header {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.7));
+      backdrop-filter: blur(6px);
     }
-    
-    /* 卡片悬停效果 */
-    .quote-card {
-      transition: all 0.3s ease;
-      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-      position: relative;
-      overflow: hidden;
-      break-inside: avoid;
-      margin-bottom: 1.5rem;
+
+    .dark header.site-header {
+      background: linear-gradient(180deg, rgba(6, 8, 15, 0.6), rgba(6, 8, 15, 0.4));
+    }
+
+    .logo-wrap {
+      height: 64px;
       display: flex;
-      flex-direction: column;
-      max-height: 70vh; /* 根据视口高度调整卡片最大高度 */
-      min-height: 200px; /* 最小高度确保卡片可见 */
+      align-items: center;
     }
-    
-    .quote-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
-    }
-    
-    .quote-card:hover::before {
-      transform: scaleX(1);
-    }
-    
-    .quote-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-    
-    /* 卡片内容区域 - 可滚动 */
-    .card-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.5rem 0;
-      scrollbar-width: thin;
-      scrollbar-color: #cbd5e1 #f1f5f9;
-    }
-    
-    .card-content::-webkit-scrollbar {
-      width: 4px;
-    }
-    
-    .card-content::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 10px;
-    }
-    
-    .card-content::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 10px;
-    }
-    
-    .card-content::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-    
-    /* 瀑布流布局 */
-    .masonry-grid {
-      column-count: 1;
-      column-gap: 1.5rem;
-    }
-    
-    @media (min-width: 768px) {
-      .masonry-grid {
-        column-count: 2;
-      }
-    }
-    
-    @media (min-width: 1024px) {
-      .masonry-grid {
-        column-count: 3; /* 桌面和大屏幕统一使用3列 */
-      }
-    }
-    
-    /* 渐变背景 */
-    .gradient-bg-1 {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    }
-    
-    .gradient-bg-2 {
-      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-    }
-    
-    .gradient-bg-3 {
-      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-    }
-    
-    .gradient-bg-4 {
-      background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
-    }
-    
-    .gradient-bg-5 {
-      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-    }
-    
-    /* 加载动画 */
-    .loading-dots {
-      display: inline-block;
-      position: relative;
-      width: 80px;
-      height: 80px;
-    }
-    
-    .loading-dots div {
-      position: absolute;
-      top: 33px;
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: #3b82f6;
-      animation-timing-function: cubic-bezier(0, 1, 1, 0);
-    }
-    
-    .loading-dots div:nth-child(1) {
-      left: 8px;
-      animation: loading-dots1 0.6s infinite;
-    }
-    
-    .loading-dots div:nth-child(2) {
-      left: 8px;
-      animation: loading-dots2 0.6s infinite;
-    }
-    
-    .loading-dots div:nth-child(3) {
-      left: 32px;
-      animation: loading-dots2 0.6s infinite;
-    }
-    
-    .loading-dots div:nth-child(4) {
-      left: 56px;
-      animation: loading-dots3 0.6s infinite;
-    }
-    
-    @keyframes loading-dots1 {
-      0% { transform: scale(0); }
-      100% { transform: scale(1); }
-    }
-    
-    @keyframes loading-dots3 {
-      0% { transform: scale(1); }
-      100% { transform: scale(0); }
-    }
-    
-    @keyframes loading-dots2 {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(24px, 0); }
-    }
-    
-    /* 底部导航栏间距 */
-    .main-content {
-      padding-bottom: 100px !important;
-      min-height: calc(100vh - 200px); /* 确保内容区域有足够高度 */
-    }
-    
-    /* 设置弹窗样式 */
-    .settings-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
+
+    .logo-img {
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .settings-content {
-      background: white;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-    
-    .settings-header {
-      padding: 1.5rem;
-      border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .settings-body {
-      padding: 1.5rem;
-    }
-    
-    .settings-group {
-      margin-bottom: 1.5rem;
-    }
-    
-    .settings-label {
+      width: auto;
       display: block;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #374151;
-      margin-bottom: 0.5rem;
     }
-    
-    .settings-select {
-      width: 100%;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      padding: 0.75rem;
-      font-size: 0.875rem;
-      transition: all 0.2s;
+
+    .header-inner {
+      height: 64px;
     }
-    
-    .settings-select:focus {
-      outline: none;
-      ring: 2px;
-      ring-color: #3b82f6;
-      border-color: #3b82f6;
+
+    @media (max-width: 768px) {
+      .header-inner {
+        height: 56px;
+      }
+
+      .logo-wrap {
+        height: 56px;
+      }
     }
-    
-    .settings-footer {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
+
+    /* Theme Toggle Icons */
+    .dark .icon-sun {
+      display: block;
     }
-    
-    .btn {
-      padding: 0.5rem 1rem;
-      border-radius: 0.375rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
+
+    .dark .icon-moon {
+      display: none;
     }
-    
-    .btn-primary {
-      background-color: #3b82f6;
-      color: white;
-      border: none;
+
+    html:not(.dark) .icon-sun {
+      display: none;
     }
-    
-    .btn-primary:hover {
-      background-color: #2563eb;
+
+    html:not(.dark) .icon-moon {
+      display: block;
     }
-    
-    .btn-secondary {
-      background-color: #f3f4f6;
-      color: #374151;
-      border: 1px solid #d1d5db;
+
+    /* 主题切换按钮样式 */
+    .theme-toggle {
+      transition: all 0.3s ease;
     }
-    
-    .btn-secondary:hover {
-      background-color: #e5e7eb;
+
+    .theme-toggle:hover {
+      transform: rotate(12deg);
+    }
+
+    /* 搜索栏样式修正 (适配新头部) */
+    .search-wrapper {
+      margin-top: 80px;
+      /* 避开固定头部 */
     }
   </style>
-</head>
-<body class="gradient-bg-1 text-gray-800 flex flex-col min-h-screen transition-all duration-500">
 
-  <!-- Header -->
-  <header class="text-center py-6 bg-white/80 backdrop-blur-sm shadow-sm relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 font-serif">人生格言+</h1>
-    <p class="text-base md:text-lg text-gray-600 mt-2 font-sans">Find your words to live by.</p>
-    <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+  <script>
+      // 立即执行主题初始化
+      (function () {
+        const savedTheme = localStorage.getItem('site-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+  </script>
+</head>
+
+<body
+  class="flex flex-col min-h-screen text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+
+  <!-- 头部 (与 index.html 保持一致) -->
+  <header class="site-header fixed w-full top-0 left-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 header-inner flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="logo-wrap flex items-center gap-3">
+        <img src="./image/logo512.png" alt="人生格言网 Logo" class="logo-img">
+        <span class="text-2xl font-bold text-slate-800 dark:text-white">人生格言网</span>
+      </a>
+
+      <!-- 桌面导航 -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-700 dark:text-slate-200">
+        <a href="/lizhi.html" class="text-blue-600 font-bold">智慧箴言</a>
+        <a href="/card/quote_card_designer.html" class="hover:text-blue-600">卡片设计</a>
+        <a href="/calendar/foli.html" class="hover:text-blue-600">修行日历</a>
+        <a class="text-slate-400 dark:text-slate-600 cursor-default">素食地图</a>
+        <a class="text-slate-400 dark:text-slate-600 cursor-default">英语学习</a>
+      </nav>
+
+      <!-- 操作按钮 -->
+      <div class="flex items-center gap-3">
+        <!-- 主题切换按钮 -->
+        <button id="themeToggle" class="theme-toggle p-2 rounded-md glass-card text-slate-700 dark:text-slate-200"
+          title="切换主题">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 icon-moon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 icon-sun" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <!-- 设置按钮 (原底部导航的设置按钮移至此处，或保留两处) -->
+        <button id="settingsBtn" class="p-2 rounded-md glass-card text-slate-700 dark:text-slate-200" title="个性化设置">
+          <span class="text-xl">⚙️</span>
+        </button>
+
+        <!-- 移动端菜单按钮 -->
+        <button id="menuBtn"
+          class="md:hidden p-2 rounded-md bg-white/60 dark:bg-black/40 text-slate-700 dark:text-slate-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 移动端导航 -->
+    <nav id="mobileMenu"
+      class="md:hidden hidden bg-white/95 dark:bg-black/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800">
+      <div class="px-4 py-3 flex flex-col gap-2">
+        <a href="/lizhi-deepseek.html" class="py-2 border-b dark:border-slate-800 text-blue-600">智慧箴言</a>
+        <a href="/card/quote_card_designer.html"
+          class="py-2 border-b dark:border-slate-800 text-slate-700 dark:text-slate-300">卡片设计</a>
+        <a class="py-2 border-b dark:border-slate-800 text-slate-400 dark:text-slate-600 cursor-default">素食地图</a>
+        <a href="/calendar/foli.html"
+          class="py-2 border-b dark:border-slate-800 text-slate-700 dark:text-slate-300">修行日历</a>
+        <a class="py-2 border-b dark:border-slate-800 text-slate-400 dark:text-slate-600 cursor-default">英语学习</a>
+      </div>
+    </nav>
   </header>
 
-  <!-- Controls (默认隐藏) -->
-  <div id="controlsPanel" class="hidden flex-wrap justify-center gap-3 p-4 bg-white/60 backdrop-blur-sm border-b border-gray-200 shadow-sm">
-    <!-- 控制项内容已移动到设置弹窗 -->
+  <!-- 搜索栏 (调整位置) -->
+  <div
+    class="search-wrapper p-4 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border-b border-gray-200 dark:border-slate-700">
+    <div class="max-w-7xl mx-auto">
+      <label for="searchInput" class="sr-only">搜索格言或作者</label>
+      <div class="search-container flex justify-center">
+        <div class="relative" style="width: 100%; max-width: 600px;">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput"
+            class="search-input dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600" placeholder="搜索格言或作者..."
+            aria-label="搜索格言或作者" />
+          <span id="clearSearch" class="clear-search" role="button" aria-label="清除搜索">✕</span>
+        </div>
+      </div>
+      <!-- 筛选标签 -->
+      <div class="filter-tags">
+        <span class="filter-tag active" data-filter="all" role="button" tabindex="0">全部</span>
+        <span class="filter-tag" data-filter="favorites" role="button" tabindex="0">我的收藏</span>
+      </div>
+    </div>
   </div>
 
   <!-- Content -->
@@ -330,41 +232,39 @@
       </div>
       <!-- 瀑布流卡片由 JS 加载 -->
     </div>
+
+    <!-- 无结果提示 -->
+    <div id="noResults" class="hidden col-span-full text-center py-12">
+      <p class="text-gray-500 dark:text-slate-400 text-lg">😔 没有找到相关内容</p>
+      <button id="clearFilters" class="mt-4 btn btn-primary">清除筛选</button>
+    </div>
+
+    <!-- 加载更多指示器 -->
+    <div id="loadMoreIndicator" class="load-more-indicator hidden dark:text-slate-400">
+      <div class="loading-dots inline-block">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <p class="mt-2">正在加载更多...</p>
+    </div>
   </main>
 
   <!-- 设置弹窗 -->
   <div id="settingsModal" class="settings-modal">
-    <div class="settings-content">
-      <div class="settings-header">
-        <h2 class="text-xl font-bold text-gray-800">设置</h2>
-        <button id="closeSettings" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    <div class="settings-content dark:bg-slate-800 dark:text-slate-100">
+      <div class="settings-header dark:border-slate-700">
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white">设置</h2>
+        <button id="closeSettings"
+          class="text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200 text-2xl"
+          aria-label="关闭设置">&times;</button>
       </div>
       <div class="settings-body">
         <div class="settings-group">
-          <label class="settings-label">字体大小</label>
-          <select id="fontSize" class="settings-select">
-            <option value="text-base">小</option>
-            <option value="text-lg" selected>中</option>
-            <option value="text-xl">大</option>
-            <option value="text-2xl">特大</option>
-          </select>
-        </div>
-        
-        <div class="settings-group">
-          <label class="settings-label">字体颜色</label>
-          <select id="fontColor" class="settings-select">
-            <option value="text-gray-800">深色</option>
-            <option value="text-sky-600">天色</option>
-            <option value="text-blue-600">蓝色</option>
-            <option value="text-purple-600">紫色</option>
-            <option value="text-green-600">绿色</option>
-            <option value="text-amber-700">琥珀色</option>
-          </select>
-        </div>
-        
-        <div class="settings-group">
-          <label class="settings-label">背景主题</label>
-          <select id="bgColor" class="settings-select">
+          <label class="settings-label dark:text-slate-300">背景主题</label>
+          <select id="bgColor" class="settings-select dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+            aria-label="选择背景主题">
             <option value="gradient-bg-1">淡蓝灰</option>
             <option value="gradient-bg-2">紫蓝渐变</option>
             <option value="gradient-bg-3">天空蓝</option>
@@ -373,386 +273,85 @@
             <option value="bg-white">纯白</option>
           </select>
         </div>
-        
+
         <div class="settings-group">
-          <label class="settings-label">字体样式</label>
-          <select id="fontFamily" class="settings-select">
+          <label class="settings-label dark:text-slate-300">字体大小</label>
+          <select id="fontSize" class="settings-select dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+            aria-label="选择字体大小">
+            <option value="text-base">小</option>
+            <option value="text-lg" selected>中</option>
+            <option value="text-xl">大</option>
+            <option value="text-2xl">特大</option>
+          </select>
+        </div>
+
+        <div class="settings-group">
+          <label class="settings-label dark:text-slate-300">字体颜色</label>
+          <select id="fontColor" class="settings-select dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+            aria-label="选择字体颜色">
+            <option value="text-gray-800">深色</option>
+            <option value="text-sky-600">天色</option>
+            <option value="text-blue-600">蓝色</option>
+            <option value="text-purple-600">紫色</option>
+            <option value="text-green-600">绿色</option>
+            <option value="text-amber-700">琥珀色</option>
+          </select>
+        </div>
+
+        <div class="settings-group">
+          <label class="settings-label dark:text-slate-300">字体样式</label>
+          <select id="fontFamily" class="settings-select dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+            aria-label="选择字体样式">
             <option value="font-sans">无衬线体</option>
             <option value="font-serif" selected>衬线体</option>
             <option value="font-mono">等宽体</option>
             <option value="chinese-handwriting">手写体</option>
           </select>
         </div>
-        
+
         <div class="settings-group">
-          <label class="settings-label">布局模式</label>
-          <select id="layoutMode" class="settings-select">
+          <label class="settings-label dark:text-slate-300">布局模式</label>
+          <select id="layoutMode" class="settings-select dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+            aria-label="选择布局模式">
             <option value="masonry">瀑布流</option>
             <option value="grid">网格</option>
           </select>
         </div>
       </div>
-      <div class="settings-footer">
-        <button id="resetSettings" class="btn btn-secondary">恢复默认</button>
-        <button id="saveSettings" class="btn btn-primary">保存设置</button>
+      <div class="settings-footer dark:border-slate-700">
+        <button id="resetSettings"
+          class="btn btn-secondary dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600">恢复默认</button>
+        <button id="saveSettingsBtn" class="btn btn-primary">保存设置</button>
       </div>
     </div>
   </div>
 
-  <!-- 底部导航栏 -->
-  <footer class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-200 p-3 flex justify-around text-xs z-10">
-    <a href="./index.html" class="flex flex-col items-center text-gray-700 hover:text-indigo-600 transition-all duration-300 transform hover:-translate-y-1">
-      <span class="text-xl mb-1">📚</span>
-      <span>分类</span>
-    </a>
-    <!-- <a href="./rand.html" class="flex flex-col items-center text-gray-700 hover:text-green-600 transition-all duration-300 transform hover:-translate-y-1">
-      <span class="text-xl mb-1">🔀</span>
-      <span>随机</span> -->
-    </a>
-    <button id="settingsBtn" class="flex flex-col items-center text-gray-700 hover:text-blue-500 transition-all duration-300 transform hover:-translate-y-1">
-      <span class="text-xl mb-1">⚙️</span>
-      <span>设置</span>
-    </button>
+  <!-- 底部页脚 (与 index.html 保持一致，移除旧版底部导航) -->
+  <footer class="max-w-7xl mx-auto px-4 pb-8 text-center text-sm text-slate-600 dark:text-slate-400">
+    <div class="flex items-center justify-center gap-2 mb-2">
+      © 2025 <span>人生格言网</span>
+    </div>
   </footer>
 
-  <!-- JSON 数据加载 & 控制逻辑 -->
+  <!-- 脚本引用 -->
+  <script src="js/lizhi-enhanced.js"></script>
   <script>
-    const container = document.getElementById("quoteContainer");
-    const loadingIndicator = document.getElementById("loadingIndicator");
-    const settingsBtn = document.getElementById("settingsBtn");
-    const settingsModal = document.getElementById("settingsModal");
-    const closeSettings = document.getElementById("closeSettings");
-    const saveSettings = document.getElementById("saveSettings");
-    const resetSettings = document.getElementById("resetSettings");
-
-    // 默认设置
-    const defaultSettings = {
-      fontSize: 'text-lg',
-      fontColor: 'text-gray-800',
-      bgColor: 'gradient-bg-1',
-      fontFamily: 'font-serif',
-      layoutMode: 'masonry'
-    };
-
-    // 默认数据 - 当JSON文件加载失败时使用
-    const defaultQuotes = [
-      {
-        text: "天行健，君子以自强不息；地势坤，君子以厚德载物。",
-        author: "《周易》"
-      },
-      {
-        text: "不积跬步，无以至千里；不积小流，无以成江海。骐骥一跃，不能十步；驽马十驾，功在不舍。",
-        author: "荀子《劝学》"
-      },
-      {
-        text: "志不立，天下无可成之事。虽百工技艺，未有不本于志者。今学者旷废隳惰，玩岁愒时，而百无所成，皆由于志之未立耳。",
-        author: "王阳明"
-      },
-      {
-        text: "读书破万卷，下笔如有神。赋料扬雄敌，诗看子建亲。李邕求识面，王翰愿卜邻。自谓颇挺出，立登要路津。",
-        author: "杜甫《奉赠韦左丞丈二十二韵》"
-      },
-      {
-        text: "黑发不知勤学早，白首方悔读书迟。三更灯火五更鸡，正是男儿读书时。",
-        author: "颜真卿《劝学》"
-      },
-      {
-        text: "路漫漫其修远兮，吾将上下而求索。长太息以掩涕兮，哀民生之多艰。余虽好修姱以鞿羁兮，謇朝谇而夕替。",
-        author: "屈原《离骚》"
-      },
-      {
-        text: "宝剑锋从磨砺出，梅花香自苦寒来。少壮不经勤学苦，老来方悔读书迟。书到用时方恨少，事非经过不知难。",
-        author: "《警世贤文》"
-      },
-      {
-        text: "千淘万漉虽辛苦，吹尽狂沙始到金。莫道谗言如浪深，莫言迁客似沙沉。",
-        author: "刘禹锡《浪淘沙》"
-      },
-      {
-        text: "非淡泊无以明志，非宁静无以致远。夫学须静也，才须学也，非学无以广才，非志无以成学。",
-        author: "诸葛亮《诫子书》"
-      },
-      {
-        text: "学而不思则罔，思而不学则殆。知之为知之，不知为不知，是知也。温故而知新，可以为师矣。",
-        author: "孔子《论语》"
-      },
-      {
-        text: "知之者不如好之者，好之者不如乐之者。默而识之，学而不厌，诲人不倦，何有于我哉？",
-        author: "孔子《论语》"
-      },
-      {
-        text: "三人行，必有我师焉。择其善者而从之，其不善者而改之。见贤思齐焉，见不贤而内自省也。",
-        author: "孔子《论语》"
-      },
-      {
-        text: "业精于勤，荒于嬉；行成于思，毁于随。焚膏油以继晷，恒兀兀以穷年。先生之业，可谓勤矣。",
-        author: "韩愈《进学解》"
-      },
-      {
-        text: "玉不琢，不成器；人不学，不知道。是故古之王者，建国君民，教学为先。",
-        author: "《礼记·学记》"
-      },
-      {
-        text: "博学之，审问之，慎思之，明辨之，笃行之。有弗学，学之弗能弗措也；有弗问，问之弗知弗措也；",
-        author: "《礼记·中庸》"
-      },
-      {
-        text: "少年易老学难成，一寸光阴不可轻。未觉池塘春草梦，阶前梧叶已秋声。",
-        author: "朱熹《劝学诗》"
-      },
-      {
-        text: "纸上得来终觉浅，绝知此事要躬行。古人学问无遗力，少壮工夫老始成。",
-        author: "陆游《冬夜读书示子聿》"
-      },
-      {
-        text: "问渠那得清如许？为有源头活水来。半亩方塘一鉴开，天光云影共徘徊。",
-        author: "朱熹《观书有感》"
-      },
-      {
-        text: "盛年不重来，一日难再晨。及时当勉励，岁月不待人。",
-        author: "陶渊明《杂诗》"
-      },
-      {
-        text: "明日复明日，明日何其多。我生待明日，万事成蹉跎。",
-        author: "钱福《明日歌》"
-      }
-    ];
-
-    // Cookie 操作函数
-    function setCookie(name, value, days = 365) {
-      const expires = new Date();
-      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-      document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))};expires=${expires.toUTCString()};path=/`;
+    // 移动菜单切换逻辑 (内联，因为这部分与特定HTML结构绑定)
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     }
 
-    function getCookie(name) {
-      const nameEQ = name + "=";
-      const ca = document.cookie.split(';');
-      for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) {
-          return JSON.parse(decodeURIComponent(c.substring(nameEQ.length, c.length)));
-        }
-      }
-      return null;
-    }
-
-    // 加载设置
-    function loadSettings() {
-      const savedSettings = getCookie('quoteSettings');
-      return savedSettings ? {...defaultSettings, ...savedSettings} : defaultSettings;
-    }
-
-    // 保存设置
-    function saveSettingsToCookie() {
-      const settings = {
-        fontSize: document.getElementById('fontSize').value,
-        fontColor: document.getElementById('fontColor').value,
-        bgColor: document.getElementById('bgColor').value,
-        fontFamily: document.getElementById('fontFamily').value,
-        layoutMode: document.getElementById('layoutMode').value
-      };
-      setCookie('quoteSettings', settings);
-      return settings;
-    }
-
-    // 应用设置到表单
-    function applySettingsToForm(settings) {
-      document.getElementById('fontSize').value = settings.fontSize;
-      document.getElementById('fontColor').value = settings.fontColor;
-      document.getElementById('bgColor').value = settings.bgColor;
-      document.getElementById('fontFamily').value = settings.fontFamily;
-      document.getElementById('layoutMode').value = settings.layoutMode;
-    }
-
-    // 全局样式更新函数
-    function updateStyle() {
-      const fontSize = document.getElementById("fontSize").value;
-      const fontColor = document.getElementById("fontColor").value;
-      const bgColor = document.getElementById("bgColor").value;
-      const fontFamily = document.getElementById("fontFamily").value;
-      const layoutMode = document.getElementById("layoutMode").value;
-
-      // 为每个正文元素添加样式
-      document.querySelectorAll(".quote-text").forEach(el => {
-        el.className = `quote-text mb-4 leading-relaxed whitespace-pre-line ${fontSize} ${fontColor} ${fontFamily}`;
-      });
-
-      // 更新页面背景色
-      document.body.className = `flex flex-col min-h-screen transition-all duration-500 ${bgColor} text-gray-800`;
-      
-      // 为作者元素添加样式
-      document.querySelectorAll(".quote-author").forEach(el => {
-        el.className = `quote-author text-center text-sm text-gray-500 mt-2 italic ${fontFamily}`;
-      });
-
-      // 更新布局
-      if (layoutMode === 'grid') {
-        container.className = 'grid gap-6 md:grid-cols-2 lg:grid-cols-3';
-      } else {
-        container.className = 'masonry-grid';
-      }
-    }
-
-    // 设置弹窗控制
-    function setupSettingsModal() {
-      // 打开设置
-      settingsBtn.addEventListener('click', function() {
-        settingsModal.style.display = 'flex';
-        this.classList.add('float-animation');
-        setTimeout(() => {
-          this.classList.remove('float-animation');
-        }, 3000);
-      });
-
-      // 关闭设置
-      closeSettings.addEventListener('click', function() {
-        settingsModal.style.display = 'none';
-      });
-
-      // 点击弹窗外部关闭
-      settingsModal.addEventListener('click', function(e) {
-        if (e.target === settingsModal) {
-          settingsModal.style.display = 'none';
-        }
-      });
-
-      // 保存设置
-      saveSettings.addEventListener('click', function() {
-        const settings = saveSettingsToCookie();
-        updateStyle();
-        settingsModal.style.display = 'none';
-        showNotification('设置已保存');
-      });
-
-      // 重置设置
-      resetSettings.addEventListener('click', function() {
-        applySettingsToForm(defaultSettings);
-        showNotification('已恢复默认设置');
+    // 主题切换逻辑
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
       });
     }
-
-    // 显示通知
-    function showNotification(message) {
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 fade-in-up';
-      notification.textContent = message;
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.remove();
-      }, 3000);
-    }
-
-    // 渲染卡片
-    function renderQuotes(quotes) {
-      container.innerHTML = ""; // 清空旧内容
-
-      if (!Array.isArray(quotes) || quotes.length === 0) {
-        container.innerHTML = "<p class='text-red-500 col-span-full text-center py-8'>没有找到格言数据</p>";
-        return;
-      }
-
-      quotes.forEach((item, index) => {
-        const card = document.createElement("div");
-        card.className = `quote-card p-6 text-center rounded-2xl shadow-lg bg-white/90 backdrop-blur-sm fade-in-up`;
-        card.style.animationDelay = `${index * 0.1}s`;
-        card.style.opacity = 0;
-
-        // 创建可滚动的内容区域
-        const cardContent = document.createElement("div");
-        cardContent.className = "card-content";
-
-        // 装饰性引号
-        const openQuote = document.createElement("div");
-        openQuote.className = "text-4xl text-blue-300 mb-2";
-        openQuote.textContent = "“";
-
-        // 正文
-        const pText = document.createElement("p");
-        pText.className = "quote-text mb-4 leading-relaxed whitespace-pre-line text-lg text-gray-800 font-serif";
-        pText.textContent = (item && item.text) ? String(item.text) : "";
-
-        // 装饰性引号
-        const closeQuote = document.createElement("div");
-        closeQuote.className = "text-4xl text-blue-300 mt-2";
-        closeQuote.textContent = "”";
-
-        // 作者
-        const pAuthor = document.createElement("p");
-        pAuthor.className = "quote-author text-center text-sm text-gray-500 mt-2 italic font-serif";
-        pAuthor.textContent = "—— " + ((item && item.author) ? String(item.author) : "佚名");
-
-        // 组装卡片
-        cardContent.appendChild(openQuote);
-        cardContent.appendChild(pText);
-        cardContent.appendChild(closeQuote);
-        card.appendChild(cardContent);
-        card.appendChild(pAuthor);
-        container.appendChild(card);
-      });
-
-      // 应用当前控制项
-      updateStyle();
-    }
-
-    // 加载并渲染卡片
-    async function loadQuotes() {
-      try {
-        // 优先从JSON文件加载数据
-        const res = await fetch("data/lizhi.json");
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const quotes = await res.json();
-        
-        // 隐藏加载指示器
-        loadingIndicator.style.display = 'none';
-        
-        // 渲染从JSON文件获取的数据
-        renderQuotes(quotes);
-        
-      } catch (err) {
-        console.error("从JSON文件加载数据失败，使用默认数据:", err);
-        
-        // 模拟加载延迟
-        setTimeout(() => {
-          // 隐藏加载指示器
-          loadingIndicator.style.display = 'none';
-          
-          // 使用默认数据
-          renderQuotes(defaultQuotes);
-          
-          // 显示使用默认数据的提示
-          showNotification('使用默认格言数据');
-        }, 1000);
-      }
-    }
-
-    // 初始化
-    document.addEventListener('DOMContentLoaded', function() {
-      // 加载设置并应用到表单
-      const settings = loadSettings();
-      applySettingsToForm(settings);
-      
-      // 设置弹窗
-      setupSettingsModal();
-      
-      // 应用设置
-      updateStyle();
-      
-      // 加载数据
-      loadQuotes();
-      
-      // 添加手写体样式类
-      const style = document.createElement('style');
-      style.textContent = `
-        .chinese-handwriting {
-          font-family: 'Ma Shan Zheng', cursive;
-        }
-      `;
-      document.head.appendChild(style);
-    });
   </script>
-
 </body>
+
 </html>
