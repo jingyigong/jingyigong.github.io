@@ -5,6 +5,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>人生格言网 | Motto Collection</title>
+
+  <!-- SEO & Meta Tags -->
+  <meta name="description" content="每日精选励志格言、哲学金句、人生感悟。人生格言网为您提供温暖与智慧的源泉，涵盖古今中外名言警句。" />
+  <meta name="keywords" content="格言, 语录, 励志, 哲学, 人生感悟, 名言警句, 每日一言" />
+  <meta name="author" content="人生格言网" />
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="人生格言网 | 温暖与智慧同行" />
+  <meta property="og:description" content="每日精选励志格言、哲学金句、人生感悟。探索古今智慧，收藏属于你的灵感。" />
+  <meta property="og:image" content="./image/logo512.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="./icon/quote-right-32x32.png" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -135,6 +150,7 @@
         }
       })();
   </script>
+</head>
 
 <body
   class="antialiased text-gray-900 dark:text-slate-100 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
@@ -158,31 +174,30 @@
       </nav>
 
       <!-- 操作按钮 -->
+      <div class="flex items-center gap-3">
 
+        <!-- 主题切换按钮 -->
+        <button id="themeToggle" class="theme-toggle p-2 rounded-md glass-card text-slate-700 dark:text-slate-200"
+          title="切换主题">
+          <!-- 浅色模式图标 (月亮 - 点击切换到深色) -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 icon-moon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+          <!-- 深色模式图标 (太阳 - 点击切换到浅色) -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 icon-sun" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
 
-      <!-- 主题切换按钮 -->
-      <!-- 主题切换按钮 -->
-      <button id="themeToggle" class="theme-toggle p-2 rounded-md glass-card text-slate-700 dark:text-slate-200"
-        title="切换主题">
-        <!-- 浅色模式图标 (月亮 - 点击切换到深色) -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 icon-moon" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-        </svg>
-        <!-- 深色模式图标 (太阳 - 点击切换到浅色) -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 icon-sun" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd"
-            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-            clip-rule="evenodd" />
-        </svg>
-      </button>
-
-      <!-- 移动端菜单按钮 -->
-      <button id="menuBtn" class="md:hidden p-2 rounded-md bg-white/60 dark:bg-black/40">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
+        <!-- 移动端菜单按钮 -->
+        <button id="menuBtn" class="md:hidden p-2 rounded-md bg-white/60 dark:bg-black/40">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- 移动端导航 -->
@@ -330,15 +345,12 @@
     menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
     // 主题切换功能
-    // 主题切换功能
     const themeToggle = document.getElementById('themeToggle');
 
     themeToggle.addEventListener('click', () => {
       const isDark = document.documentElement.classList.toggle('dark');
       localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
     });
-
-
 
     // 滚动动画
     function animateOnScroll() {
