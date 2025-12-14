@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Unicode Emoji Browser - Full List v17.0</title>
+  <meta name="description"
+    content="Explore and search the complete Unicode v17.0 emoji list. Features grid/list views, fast categorization, and instant copy-to-clipboard functionality.">
+  <meta name="keywords"
+    content="emoji list, unicode emoji, emoji browser, copy emoji, emoji search, v17.0, full emoji list">
+
+  <!-- Import Font Icons and Tailwind -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5' },
+          },
+          fontFamily: {
+            emoji: ['Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* Glassmorphism effect */
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dark .glass {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Scrollbar customization */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+
+    /* Sidebar navigation */
+    .sidebar {
+      height: calc(100vh - 8rem);
+      position: sticky;
+      top: 6rem;
+    }
+
+    /* Emoji grid item animation */
+    .emoji-item {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .emoji-item:hover {
+      transform: translateY(-2px) scale(1.05);
+      z-index: 10;
+    }
+
+    .emoji-item:active {
+      transform: scale(0.95);
+    }
+
+    /* Toast animation for successful copy */
+    @keyframes slideUpFade {
+      from {
+        transform: translate(-50%, 20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+      }
+    }
+
+    .toast-anim {
+      animation: slideUpFade 0.3s ease forwards;
+    }
+
+    /* Loading animation */
+    .loader {
+      border: 3px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 3px solid #6366f1;
+      width: 24px;
+      height: 24px;
+      -webkit-animation: spin 1s linear infinite;
+      /* Safari */
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
+  <script>
+    // Theme initialization
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  </script>
+</head>
+
+<body
+  class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300">
+
+  <!-- Top Navigation -->
+  <header class="fixed top-0 left-0 w-full z-40 glass shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl animate-bounce">🎨</span>
+        <h1
+          class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-purple-600 hidden sm:block">
+          Unicode Emoji Browser
+        </h1>
+      </div>
+
+      <div class="flex-1 max-w-lg mx-4">
+        <div class="relative group">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-search text-slate-400 group-focus-within:text-primary-500 transition-colors"></i>
+          </div>
+          <input type="text" id="searchInput"
+            class="block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white/50 dark:bg-slate-800/50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 sm:text-sm transition-all shadow-sm"
+            placeholder="Search emojis (e.g. smile, cat)...">
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- View Switcher -->
+        <div class="flex bg-slate-200 dark:bg-slate-800 rounded-lg p-1 mr-2">
+          <button id="viewGrid"
+            class="p-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 bg-white dark:bg-slate-700 shadow-sm transition-all"
+            title="Grid View">
+            <i class="fas fa-th-large"></i>
+          </button>
+          <button id="viewList"
+            class="p-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-all"
+            title="List View">
+            <i class="fas fa-list"></i>
+          </button>
+        </div>
+
+        <button id="themeToggle"
+          class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-300">
+          <i class="fas fa-moon dark:hidden"></i>
+          <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 flex gap-8">
+
+    <!-- Left Sidebar Navigation -->
+    <aside class="hidden lg:block w-64 flex-shrink-0">
+      <div class="sidebar overflow-y-auto pr-2" id="sidebar-nav">
+        <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-2">Categories</h3>
+        <nav class="space-y-1" id="categoryNav">
+          <!-- Dynamically generated -->
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 min-w-0">
+
+      <!-- Status Bar -->
+      <div
+        class="flex items-center justify-between mb-6 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+        <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+          <div class="loader" id="loadingSpinner" style="display: none;"></div>
+          <span id="statusText">Ready</span>
+        </div>
+        <div class="flex gap-2">
+          <button id="expandAll"
+            class="text-xs px-3 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors">
+            Expand All
+          </button>
+          <button id="collapseAll"
+            class="text-xs px-3 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors">
+            Collapse All
+          </button>
+        </div>
+      </div>
+
+      <!-- Content Container -->
+      <div id="contentContainer" class="space-y-8">
+        <!-- Dynamically generated Emoji content -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Back to Top -->
+  <button id="backToTop"
+    class="fixed bottom-8 right-8 p-3 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-all transform translate-y-20 opacity-0 z-50">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // --- Configuration & State ---
+    const CONFIG = {
+      rangeStart: 0x1F300,
+      rangeEnd: 0x1FAFF
+    };
+
+    let state = {
+      emojiMap: new Map(), // seqHex -> data
+      groups: {}, // groupName -> items[]
+      viewMode: 'grid', // 'grid' or 'list'
+      searchQuery: ''
+    };
+
+    // --- DOM Elements ---
+    const els = {
+      container: document.getElementById('contentContainer'),
+      sidebar: document.getElementById('categoryNav'),
+      status: document.getElementById('statusText'),
+      spinner: document.getElementById('loadingSpinner'),
+      search: document.getElementById('searchInput'),
+      themeBtn: document.getElementById('themeToggle'),
+      viewGridBtn: document.getElementById('viewGrid'),
+      viewListBtn: document.getElementById('viewList'),
+      expandBtn: document.getElementById('expandAll'),
+      collapseBtn: document.getElementById('collapseAll'),
+      backToTop: document.getElementById('backToTop')
+    };
+
+    // --- Initialization ---
+    async function init() {
+      setupEventListeners();
+      await loadEmojiData();
+    }
+
+    function setupEventListeners() {
+      // Theme toggle
+      els.themeBtn.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      });
+
+      // View toggle
+      els.viewGridBtn.addEventListener('click', () => setViewMode('grid'));
+      els.viewListBtn.addEventListener('click', () => setViewMode('list'));
+
+      // Search (Debounce)
+      let debounceTimer;
+      els.search.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          state.searchQuery = e.target.value.trim();
+          render();
+        }, 300);
+      });
+
+      // Expand/Collapse
+      els.expandBtn.addEventListener('click', () => toggleAllGroups(true));
+      els.collapseBtn.addEventListener('click', () => toggleAllGroups(false));
+
+      // Back to Top
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          els.backToTop.classList.remove('translate-y-20', 'opacity-0');
+        } else {
+          els.backToTop.classList.add('translate-y-20', 'opacity-0');
+        }
+      });
+      els.backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+
+    function setViewMode(mode) {
+      state.viewMode = mode;
+      // Update button state
+      if (mode === 'grid') {
+        els.viewGridBtn.classList.add('bg-white', 'dark:bg-slate-700', 'shadow-sm');
+        els.viewListBtn.classList.remove('bg-white', 'dark:bg-slate-700', 'shadow-sm');
+      } else {
+        els.viewListBtn.classList.add('bg-white', 'dark:bg-slate-700', 'shadow-sm');
+        els.viewGridBtn.classList.remove('bg-white', 'dark:bg-slate-700', 'shadow-sm');
+      }
+      render();
+    }
+
+    // --- Data Loading & Processing ---
+    async function loadEmojiData() {
+      els.spinner.style.display = 'block';
+      els.status.textContent = 'Parsing data...';
+
+      try {
+        const resp = await fetch('./emoji-test.txt');
+        if (!resp.ok) throw new Error('Failed to load data');
+        const text = await resp.text();
+
+        parseEmojiData(text);
+
+
+
+        els.status.textContent = `Loaded ${state.emojiMap.size} emojis`;
+        renderSidebar();
+        render();
+
+      } catch (err) {
+        console.error(err);
+        els.status.textContent = 'Failed to load data';
+      } finally {
+        els.spinner.style.display = 'none';
+      }
+    }
+
+    function parseEmojiData(text) {
+      const lines = text.split(/\r?\n/);
+      let currentGroup = 'Uncategorized';
+      let currentSubgroup = '';
+
+      state.groups = {};
+
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line) continue;
+
+        if (line.startsWith('# group:')) {
+          currentGroup = line.substring(8).trim();
+          if (!state.groups[currentGroup]) state.groups[currentGroup] = [];
+          continue;
+        }
+        // Ignore subheading, use main group only to avoid clutter
+        if (line.startsWith('#')) continue;
+
+        const parts = line.split('#');
+        if (parts.length < 2) continue;
+
+        const left = parts[0];
+        const right = parts[1];
+
+        // Extract status
+        if (!left.includes('fully-qualified') && !left.includes('component')) {
+          // Only show fully-qualified and component (prevent duplicates)
+          // Can relax restrictions if needed
+        }
+
+        const codePart = left.split(';')[0].trim();
+        const hexCodes = codePart.split(/\s+/).filter(Boolean);
+
+        // Parse character and name
+        // right: "😀 grinning face"
+        const rightTrim = right.trim();
+        const firstSpace = rightTrim.indexOf(' ');
+        const char = rightTrim.substring(0, firstSpace);
+        const name = rightTrim.substring(firstSpace + 1).trim();
+
+        const codepoints = hexCodes.map(h => parseInt(h, 16));
+
+        // Filter range (optional, currently not filtering to show all parsed)
+        // const inRange = codepoints.some(cp => cp >= CONFIG.rangeStart && cp <= CONFIG.rangeEnd);
+        // if(!inRange) continue; 
+
+        const item = {
+          char,
+          name,
+          codepoints,
+          hex: codePart,
+          group: currentGroup,
+          unicodeStr: hexCodes.map(h => `U+${h}`).join(' ')
+        };
+
+        state.emojiMap.set(codePart, item);
+
+        if (!state.groups[currentGroup]) state.groups[currentGroup] = [];
+        state.groups[currentGroup].push(item);
+      }
+    }
+
+    // --- Rendering Logic ---
+
+    function renderSidebar() {
+      const groupNames = Object.keys(state.groups).sort();
+      const html = groupNames.map(name => {
+        const count = state.groups[name].length;
+        // Simple icon mapping (guess icon by group name)
+        let icon = '📁';
+        if (name.includes('Smileys')) icon = '😀';
+        else if (name.includes('People')) icon = '👋';
+        else if (name.includes('Animals')) icon = '🐶';
+        else if (name.includes('Food')) icon = '🍎';
+        else if (name.includes('Travel')) icon = '🚗';
+        else if (name.includes('Activities')) icon = '⚽';
+        else if (name.includes('Objects')) icon = '💡';
+        else if (name.includes('Symbols')) icon = '❤️';
+        else if (name.includes('Flags')) icon = '🏳️';
+
+        return `
+                <a href="#group-${name.replace(/\s+/g, '-')}" 
+                   class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    <span class="mr-3 text-lg">${icon}</span>
+                    <span class="flex-1 truncate">${name}</span>
+                    <span class="bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 py-0.5 px-2 rounded-full text-xs">${count}</span>
+                </a>
+            `;
+      }).join('');
+      els.sidebar.innerHTML = html;
+    }
+
+    function render() {
+      els.container.innerHTML = '';
+      const isSearch = !!state.searchQuery;
+      const queryLower = state.searchQuery.toLowerCase();
+
+      let totalVisible = 0;
+
+      for (const groupName of Object.keys(state.groups).sort()) {
+        let items = state.groups[groupName];
+
+        // Search filtering
+        if (isSearch) {
+          items = items.filter(item =>
+            item.name.toLowerCase().includes(queryLower) ||
+            item.hex.toLowerCase().includes(queryLower)
+          );
+        }
+
+        if (items.length === 0) continue;
+        totalVisible += items.length;
+
+        const groupSection = document.createElement('section');
+        groupSection.id = `group-${groupName.replace(/\s+/g, '-')}`;
+        groupSection.className = 'bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 transition-all duration-300';
+
+        // Group header
+        const header = document.createElement('div');
+        header.className = 'flex items-center justify-between mb-4 cursor-pointer select-none group-header';
+        header.innerHTML = `
+                <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <i class="fas fa-chevron-down text-slate-400 text-sm transition-transform duration-300 transform"></i>
+                    ${groupName}
+                </h2>
+                <span class="text-xs font-semibold text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md">${items.length}</span>
+            `;
+
+        // Content area
+        const content = document.createElement('div');
+        content.className = 'group-content mt-4';
+
+        if (state.viewMode === 'grid') {
+          content.innerHTML = `
+                    <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3">
+                        ${items.map(item => `
+                            <div class="emoji-item aspect-square flex items-center justify-center text-3xl cursor-pointer rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 relative group"
+                                 onclick="copyEmoji('${item.char}')" 
+                                 title="${item.name}&#10;${item.unicodeStr}">
+                                <span class="font-emoji">${item.char}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+        } else {
+          content.innerHTML = `
+                   <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+                        <thead class="bg-slate-50 dark:bg-slate-800/50">
+                            <tr>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Char</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Unicode</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Name</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                            ${items.map(item => `
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer transition-colors" onclick="copyEmoji('${item.char}')">
+                                    <td class="px-3 py-2 text-2xl font-emoji text-center w-16">${item.char}</td>
+                                    <td class="px-3 py-2 text-sm text-slate-500 font-mono">${item.unicodeStr}</td>
+                                    <td class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300">${item.name}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                   </div>
+                `;
+        }
+
+        // Collapse logic
+        header.addEventListener('click', () => {
+          const isHidden = content.style.display === 'none';
+          content.style.display = isHidden ? 'block' : 'none';
+          header.querySelector('.fa-chevron-down').style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
+          groupSection.classList.toggle('opacity-75', !isHidden); // Dim slightly when collapsed? No, not needed
+        });
+
+        groupSection.appendChild(header);
+        groupSection.appendChild(content);
+        els.container.appendChild(groupSection);
+      }
+
+      if (totalVisible === 0) {
+        els.container.innerHTML = `
+                <div class="text-center py-20">
+                    <div class="text-6xl mb-4">😶</div>
+                    <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300">No matching emojis found</h3>
+                    <p class="text-slate-500 mt-2">Try a different keyword?</p>
+                </div>
+            `;
+      }
+
+      // Update stats (if searching)
+      if (isSearch) {
+        els.status.textContent = `Search results: ${totalVisible}`;
+      } else {
+        els.status.textContent = `Loaded ${state.emojiMap.size} emojis`;
+      }
+    }
+
+    // --- Interaction Features ---
+
+    function toggleAllGroups(expand) {
+      document.querySelectorAll('.group-content').forEach(el => {
+        el.style.display = expand ? 'block' : 'none';
+      });
+      document.querySelectorAll('.group-header .fa-chevron-down').forEach(el => {
+        el.style.transform = expand ? 'rotate(0deg)' : 'rotate(-90deg)';
+      });
+    }
+
+    window.copyEmoji = async (char) => {
+      try {
+        await navigator.clipboard.writeText(char);
+        showToast(`Copied: ${char}`);
+      } catch (err) {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = char;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(`Copied: ${char}`);
+      }
+    };
+
+    function showToast(msg) {
+      // Remove old toast
+      const old = document.getElementById('toast');
+      if (old) old.remove();
+
+      const toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-3 toast-anim';
+      toast.innerHTML = `<i class="fas fa-check-circle text-green-400"></i> <span class="font-medium">${msg}</span>`;
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translate(-50%, -20px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 2000);
+    }
+
+    // Start
+    init();
+  </script>
+</body>
+
+</html>

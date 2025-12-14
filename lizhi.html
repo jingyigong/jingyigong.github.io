@@ -146,7 +146,9 @@
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-700 dark:text-slate-200">
         <a href="/lizhi.html" class="text-blue-600 font-bold">智慧箴言</a>
         <a href="/card/quote_card_designer.html" class="hover:text-blue-600">卡片设计</a>
+        <a href="/clock/ysclock.html" class="hover:text-blue-600">养生时钟</a>
         <a href="/calendar/foli.html" class="hover:text-blue-600">修行日历</a>
+        <a href="unicode/full-emoji-list.html" class="hover:text-blue-600">Unicode Emoji</a>
         <a class="text-slate-400 dark:text-slate-600 cursor-default">素食地图</a>
         <a class="text-slate-400 dark:text-slate-600 cursor-default">英语学习</a>
       </nav>
@@ -166,7 +168,7 @@
           </svg>
         </button>
 
-        <!-- 设置按钮 (原底部导航的设置按钮移至此处，或保留两处) -->
+        <!-- 设置按钮 -->
         <button id="settingsBtn" class="p-2 rounded-md glass-card text-slate-700 dark:text-slate-200" title="个性化设置">
           <span class="text-xl">⚙️</span>
         </button>
@@ -185,12 +187,16 @@
     <nav id="mobileMenu"
       class="md:hidden hidden bg-white/95 dark:bg-black/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800">
       <div class="px-4 py-3 flex flex-col gap-2">
-        <a href="/lizhi-deepseek.html" class="py-2 border-b dark:border-slate-800 text-blue-600">智慧箴言</a>
+        <a href="/lizhi.html" class="py-2 border-b dark:border-slate-800 text-blue-600">智慧箴言</a>
         <a href="/card/quote_card_designer.html"
           class="py-2 border-b dark:border-slate-800 text-slate-700 dark:text-slate-300">卡片设计</a>
-        <a class="py-2 border-b dark:border-slate-800 text-slate-400 dark:text-slate-600 cursor-default">素食地图</a>
+        <a href="/clock/ysclock.html"
+          class="py-2 border-b dark:border-slate-800 text-slate-700 dark:text-slate-300">养生时钟</a>
         <a href="/calendar/foli.html"
           class="py-2 border-b dark:border-slate-800 text-slate-700 dark:text-slate-300">修行日历</a>
+        <a href="unicode/full-emoji-list.html"
+          class="py-2 border-b dark:border-slate-800 text-slate-700 dark:text-slate-300">Unicode Emoji</a>
+        <a class="py-2 border-b dark:border-slate-800 text-slate-400 dark:text-slate-600 cursor-default">素食地图</a>
         <a class="py-2 border-b dark:border-slate-800 text-slate-400 dark:text-slate-600 cursor-default">英语学习</a>
       </div>
     </nav>
@@ -260,6 +266,7 @@
           class="text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200 text-2xl"
           aria-label="关闭设置">&times;</button>
       </div>
+
       <div class="settings-body">
         <div class="settings-group">
           <label class="settings-label dark:text-slate-300">背景主题</label>
@@ -326,7 +333,7 @@
     </div>
   </div>
 
-  <!-- 底部页脚 (与 index.html 保持一致，移除旧版底部导航) -->
+  <!-- 底部页脚 (与 index.html 保持一致) -->
   <footer class="max-w-7xl mx-auto px-4 pb-8 text-center text-sm text-slate-600 dark:text-slate-400">
     <div class="flex items-center justify-center gap-2 mb-2">
       © 2025 <span>人生格言网</span>
@@ -336,7 +343,7 @@
   <!-- 脚本引用 -->
   <script src="js/lizhi-enhanced.js"></script>
   <script>
-    // 移动菜单切换逻辑 (内联，因为这部分与特定HTML结构绑定)
+    // 移动菜单切换逻辑
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
