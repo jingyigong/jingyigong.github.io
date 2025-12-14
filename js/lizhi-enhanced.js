@@ -1100,6 +1100,15 @@
       // 加载数据
       loadQuotes();
 
+      // Check URL search params
+      const urlParams = new URLSearchParams(window.location.search);
+      const q = urlParams.get('q');
+      if (q) {
+        state.searchTerm = q;
+        searchInput.value = q;
+        clearSearch.style.display = 'block';
+      }
+
     } catch (error) {
       console.error('初始化失败:', error);
       showNotification('应用初始化失败，请刷新页面', 'error');
